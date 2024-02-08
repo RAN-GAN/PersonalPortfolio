@@ -1,0 +1,15 @@
+.icons{
+    margin-top: 275px;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+}
+.imgs{
+    height:128px;
+    width:128;
+    padding: 30px;
+}
+
+a:hover{
+    transform: scale(1.075);
+}

@@ -30,6 +30,7 @@
     border-radius: 7px;
     box-shadow: 2px 2px 0.4px  rgb(205, 204, 204);
     cursor: pointer;
+    transform: scale(2px);
 }
 
 .navbtns a:active

@@ -3,7 +3,7 @@
     margin-top: 5px;
     justify-content: space-evenly;
     align-items: center;
-    background-color: rgba(40,40,40,0.2);
+    background-color: rgba(40,40,40,0.1);
     padding: 20px;
     height: 700px;
     border-radius: 20px;
@@ -13,12 +13,14 @@
     margin: 60px;
     width: 600px;
     height: 250px;
-    background-color: rgba(128, 128, 128, 0.151);
+    background-color: rgba(128, 128, 128, 0.445);
     border-radius: 20px;
-    border: 2px solid rgba(0,0,0,1);
+    border: 3px solid rgba(0,0,0,1);
     padding-top: -10px;
     padding-left: 20px;
     padding-right: 20px;
+    
+    transition: 0.2S;
 }
 
 .elements h2{
@@ -27,6 +29,7 @@
     font-family: sans-serif;
     font-size: 24px;
     color: rgb(24, 24, 24);
+    transition: 0.2s;
 }
 
 .elements p{
@@ -36,8 +39,13 @@
     color:rgb(0, 0, 0);
 }
 
+.elements h2:hover{
+    transform: scale(1.0075);
+}
+
 .elements:hover{
-    box-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+    box-shadow: 4px 4px 4px rgba(0,0,0,0.7);
+    transform: scale(1.0075);
 }
 
 .elements a{
