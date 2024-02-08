@@ -1,0 +1,38 @@
+.nav-bar{
+    background-color: black;
+    height: 40px;
+    overflow: hidden;
+    align-items: center;
+    justify-content: flex-end;
+    display: flex;
+    padding-right: 15px;
+    padding-left: 15pX;
+    border-radius: 7px;
+}
+
+.navbtns a{
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    font-family: sans-serif;
+    width: fit-content;
+    padding: 7px;
+    transition: 0.2S;
+}
+
+#home{
+    margin-right: auto;
+}
+
+.navbtns a:hover{
+    background-color: grey;
+    color: black;
+    border-radius: 7px;
+    box-shadow: 2px 2px 0.4px  rgb(205, 204, 204);
+    cursor: pointer;
+}
+
+.navbtns a:active
+{
+    box-shadow: 1px 1px 0.4px  rgb(205, 204, 204);
+}

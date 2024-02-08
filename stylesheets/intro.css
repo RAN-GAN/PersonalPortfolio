@@ -1,0 +1,49 @@
+
+span{
+    color: rgb(52, 52, 52);
+    font-size:20px;
+}
+a{
+    text-decoration: none;
+    color: inherit;
+}
+.intro{
+    padding: 17px;
+    background-color:rgba(128,128,128,0.4);
+    color: rgb(80, 80, 80);
+    font-size: large;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bolder;
+    width: 700px; /* Set the width to fit the content */
+    margin: 0 auto; /* Center the div horizontally */
+    text-align: center; /* Center the text inside the div */
+    margin-top: 100px;
+    display: flex;
+    justify-content: flex-start;
+    border-radius: 20px;
+    transition: 0.5s;
+}
+.intro:hover{
+    transform: scale(1.025);
+    box-shadow: 4px 4px 0.8px rgba(0, 0, 0, 0.64);
+}
+    
+.textarea{
+    padding: 10px;
+}
+
+.imagearea{
+    background-color: white;
+    border-style: solid;
+    border-radius: 20px;
+    border-color: grey;
+    border-width: 2px;
+    padding: 5px;
+}
+.imagearea img{
+    padding: 10px;
+    border-radius:20px;
+    height:258px;
+    width: 258px; 
+    object-fit: cover;
+}
