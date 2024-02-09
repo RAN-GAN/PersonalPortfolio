@@ -8,8 +8,15 @@
     height:128px;
     width:128;
     padding: 30px;
+    transition: 0.4s;
 }
-
+a{
+    transition: 0.4s;
+}
 a:hover{
     transform: scale(1.075);
+}
+
+.github img:hover{
+    src: url("Assets/githubinv.png");
 }
