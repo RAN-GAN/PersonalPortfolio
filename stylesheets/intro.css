@@ -1,15 +1,4 @@
 
-.textarea span{
-    color: rgb(52, 52, 52);
-    font-size:20px;
-}
-.textarea a{
-    text-decoration: none;
-    color: inherit;
-}
-.textarea p{
-    flex-wrap: wrap;
-}
 .intro{
     padding: 17px;
     background-color:rgba(128,128,128,0.4);
@@ -17,12 +6,12 @@
     font-size: large;
     font-family: Arial, Helvetica, sans-serif;
     font-weight: bolder;
+    text-align: center; 
     width: 70%;
     margin: 0 auto;
-    text-align: center; 
-    margin-top: 100px;
+    margin-top: 10%;
     display: flex;
-    justify-content: flex-start;
+    justify-content: center;
     border-radius: 20px;
     transition: 0.5s;
     flex-wrap: wrap;
@@ -32,9 +21,7 @@
     box-shadow: 4px 4px 0.8px rgba(0, 0, 0, 0.64);
 }
     
-.textarea{
-    padding: 10px;
-}
+
 
 .imagearea{
     background-color: white;
@@ -47,8 +34,24 @@
 .imagearea img{
     padding: 10px;
     border-radius:20px;
-    height:258px;
-    width: 258px; 
-    object-fit: cover;
+    max-width: 100%-10px;
+    max-height: 100%-10px;
+    object-fit:fill;
     /* filter: grayscale(0.66); */
+}
+
+
+.textarea{
+    padding: 2%;
+}
+.textarea span{
+    color: rgb(52, 52, 52);
+    font-size:20px;
+}
+.textarea a{
+    text-decoration: none;
+    color: inherit;
+}
+.textarea p{
+    flex-wrap: wrap;
 }
