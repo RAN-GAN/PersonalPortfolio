@@ -55,3 +55,8 @@
 .textarea p{
     flex-wrap: wrap;
 }
+
+header{
+    position: fixed;
+    width: 100%;
+  }

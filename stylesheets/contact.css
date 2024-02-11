@@ -1,5 +1,5 @@
 .icons {
-    margin-top: 25%px;
+    margin-top: 20%;
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
@@ -20,3 +20,8 @@
 .icons a:hover {
     transform: scale(1.075);
 }
+
+header{
+    position: fixed;
+    width: 100%;
+  }

@@ -41,3 +41,8 @@
     transform: scale(1.0075);
     box-shadow: 2px 2px 8px rgba(50,50,50,0.7);
 }
+
+  header{
+    position: fixed;
+    width: 100%;
+  }
