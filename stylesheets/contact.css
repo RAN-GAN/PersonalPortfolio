@@ -6,14 +6,15 @@
 }
 .imgs{
     height:128px;
-    width:128;
+    width:128px;
     padding: 30px;
     transition: 0.4s;
 }
-a{
+.icons a{
     transition: 0.4s;
+
 }
-a:hover{
+.icons a:hover{
     transform: scale(1.075);
 }
 

@@ -1,9 +1,9 @@
 
-span{
+.textarea span{
     color: rgb(52, 52, 52);
     font-size:20px;
 }
-a{
+.textarea a{
     text-decoration: none;
     color: inherit;
 }
@@ -46,4 +46,5 @@ a{
     height:258px;
     width: 258px; 
     object-fit: cover;
+    /* filter: grayscale(0.66); */
 }
