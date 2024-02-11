@@ -1,23 +1,22 @@
-.icons{
+.icons {
     margin-top: 275px;
-    align-items: center;
-    justify-content: center;
     display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
 }
-.imgs{
-    height:128px;
-    width:128px;
+
+.imgs {
+    height: 128px;
+    width: 128px;
     padding: 30px;
     transition: 0.4s;
 }
-.icons a{
+
+.icons a {
     transition: 0.4s;
-
+    display: flex;
 }
-.icons a:hover{
+
+.icons a:hover {
     transform: scale(1.075);
-}
-
-.github img:hover{
-    src: url("Assets/githubinv.png");
 }
