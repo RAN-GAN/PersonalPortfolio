@@ -1,3 +1,6 @@
+/* ------------------------------------ */
+/* navbar styles */
+/* ------------------------------------ */
 .nav-bar{
     background-color: black;
     height: 40px;
@@ -36,6 +39,198 @@
 .navbtns a:active
 {
     box-shadow: 1px 1px 0.4px  rgb(205, 204, 204);
+}
+
+header{
+    position: fixed;
+    width: 100%;
+}
+
+/* ------------------------------------ */
+/* intro styles */
+/* ------------------------------------ */
+
+.intro{
+    padding: 17px;
+    background-color:rgba(128,128,128,0.4);
+    color: rgb(80, 80, 80);
+    font-size: large;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bolder;
+    text-align: center; 
+    width: 70%;
+    margin: 0 auto;
+    margin-top: 10%;
+    display: flex;
+    justify-content: center;
+    border-radius: 20px;
+    transition: 0.5s;
+    flex-wrap: wrap;
+}
+.intro:hover{
+    transform: scale(1.025);
+    box-shadow: 4px 4px 0.8px rgba(0, 0, 0, 0.64);
+}
+    
+.imagearea{
+    background-color: white;
+    border-style: solid;
+    border-radius: 20px;
+    border-color: grey;
+    border-width: 2px;
+    padding: 5px;
+}
+.imagearea img{
+    padding: 10px;
+    border-radius:20px;
+    max-width: 100%-10px;
+    max-height: 100%-10px;
+    object-fit:fill;
+    /* filter: grayscale(0.66); */
+}
+
+.textarea{
+    padding: 2%;
+}
+.textarea span{
+    color: rgb(52, 52, 52);
+    font-size:20px;
+}
+.textarea a{
+    text-decoration: none;
+    color: inherit;
+}
+.textarea p{
+    flex-wrap: wrap;
+}
+
+/* ------------------------------------ */
+/* projects styles */
+/* ------------------------------------ */
+
+
+.con {
+    display: flex;
+    margin-top: 5%;
+    justify-content: space-evenly;
+    align-items: center;
+    padding: 20px;
+    border-radius: 20px;
+    flex-wrap: wrap;
+  }
+  
+  .elements {
+    margin-bottom: 20px;
+    width: 100%;
+    max-width: 600px;
+    max-height: 400px;
+    background-color: rgba(128, 128, 128, 0.445);
+    border-radius: 20px;
+    border: 3px solid rgba(0, 0, 0, 1);
+    padding: 20px; /* Adjust padding as needed */
+    transition: 0.2s;
+  }
+  
+  
+  .elements h2 {
+    text-decoration: underline;
+    font-weight: bolder;
+    font-family: sans-serif;
+    font-size: 24px;
+    color: rgb(24, 24, 24);
+    transition: 0.2s;
+  }
+  
+  .elements p {
+    font-family: sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    color: rgb(0, 0, 0);
+  }
+  
+  .elements:hover {
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    transform: scale(1.02); /* Adjust scaling for hover effect */
+  }
+  
+  .elements a {
+    text-decoration: none;
+    color: inherit;
+  }
+  
+/* ------------------------------------ */
+/* skills styles */
+/* ------------------------------------ */
+
+.skillscon{
+    margin: auto;
+    margin-top: 3%;
+    align-items: center;
+    width: 90%;
+    height: 95%;
+    max-width: 1000px;
+    background-color: rgba(45,45,45,0.6);
+    border-radius: 20px;
+    padding: 20px;
+
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.it{
+    border-radius: 20px;
+    max-width: 400px;
+    max-height: 550px;
+    margin: 5%;
+    background-color: rgba(187, 187, 187, 0.5);
+    transition: 0.2s;
+    padding:30px;
+}
+
+.it p,ul,li{
+    color: rgb(0, 0, 0);
+    font-weight: bold;
+    list-style:decimal;
+    font-size: 20px;
+}
+
+
+.it h1{
+    text-align: center;
+    text-decoration: underline;
+}
+
+.it:hover{
+    transform: scale(1.0075);
+    box-shadow: 2px 2px 8px rgba(50,50,50,0.7);
+}
+
+/* ------------------------------------ */
+/* contact styles */
+/* ------------------------------------ */
+
+.icons {
+    margin-top: 20%;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.imgs {
+    height: 128px;
+    width: 128px;
+    padding: 30px;
+    transition: 0.4s;
+}
+
+.icons a {
+    transition: 0.4s;
+    display: flex;
+}
+
+.icons a:hover {
+    transform: scale(1.075);
 }
 
 header{
