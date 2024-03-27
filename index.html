@@ -1,46 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Personal Portfolio</title>
-  <link rel="stylesheet" href="stylesheets/styles.css">
-  <link rel="icon" type="image/x-icon" href="Assets/cv.png">
-  <style>
-    body{
-    background: url("Assets/white_linen_texture.jpg");
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin:1px;
-    padding:1px;
-    }
-  </style>
-</head>
+  <head>
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-7EV1THX7LE"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
 
+      gtag("config", "G-7EV1THX7LE");
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Personal Portfolio</title>
+    <link rel="stylesheet" href="stylesheets/styles.css" />
+    <link rel="icon" type="image/x-icon" href="Assets/cv.png" />
+    <style>
+      body {
+        background: url("Assets/white_linen_texture.jpg");
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        margin: 1px;
+        padding: 1px;
+      }
+    </style>
+  </head>
 
-<body>
-  <header>
-    <div class="nav-bar">
-      <div class = "navbtns" id="home"><a href="index.html">Home</a></div>
-      <div class = "navbtns"><a href="skills.html">Skills</a></div>
-      <div class = "navbtns"><a href="projects.html">Projects</a></div>
-      <div class = "navbtns"><a href="contact.html">Contact</a></div>
+  <body>
+    <header>
+      <div class="nav-bar">
+        <div class="navbtns" id="home"><a href="index.html">Home</a></div>
+        <div class="navbtns"><a href="skills.html">Skills</a></div>
+        <div class="navbtns"><a href="projects.html">Projects</a></div>
+        <div class="navbtns"><a href="contact.html">Contact</a></div>
+      </div>
+    </header>
+    <div class="intro">
+      <div class="textarea">
+        <p>
+          Hello, I'm
+          <span
+            ><a
+              class="ln"
+              target="_blank"
+              href="https://www.linkedin.com/in/pradeepchandranm/"
+              >Pradeep Chandran M</a
+            ></span
+          >
+        </p>
+        <p>This is my personal Portfolio</p>
+        <p>
+          I am currently pursuing Integrated M.Tech in Computer Science and
+          Engineering in <br /><span
+            ><a target="_blank" href="https://skcet.ac.in/"
+              >Sri Krishna College of Engineering and Technology</a
+            ></span
+          >
+        </p>
+        <p>Do visit the other pages to know more about me!</p>
+      </div>
+      <div class="imagearea">
+        <img src="Assets\pfp.jpg" alt="profile photo" />
+      </div>
     </div>
-  </header>
-  <div class="intro">
-    <div class="textarea">
-      <p>Hello, I'm <span><a class="ln" target="_blank" href="https://www.linkedin.com/in/pradeepchandranm/">Pradeep Chandran M</a></span></p>
-      <p>This is my personal Portfolio</p>
-      <p>I am currently pursuing Integrated M.Tech in Computer Science and Engineering in <br><span><a target="_blank" href="https://skcet.ac.in/">Sri Krishna College of Engineering and Technology</a></span></p>
-      <p>Do visit the other pages to know more about me!</p>
-    </div>
-    <div class="imagearea">
-      <img src="Assets\pfp.jpg" alt="profile photo">
-    </div>
-  </div>
-
-</body>
+  </body>
 </html>
