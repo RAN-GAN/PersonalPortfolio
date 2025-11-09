@@ -1,0 +1,16 @@
+@import "tailwindcss";
+
+/* Global Styles */
+html {
+  background-color: #efefef;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom CSS Variables for dynamic colors */
+.link-item {
+  text-decoration-color: var(--decoration-color, #10a2f5);
+}
