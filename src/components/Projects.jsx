@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 export default function Projects() {
   const achievements = [
@@ -58,8 +59,8 @@ text-gray-800 bg-white/10 backdrop-blur-sm rounded-xl shadow-sm border border-gr
     >
       <div className="w-full">
         {/* Back Button */}
-        <a
-          href="/"
+        <Link
+          to="/"
           className="text-base text-gray-500 flex items-center gap-1 cursor-pointer hover:text-gray-700 mb-4"
         >
           <svg
@@ -77,7 +78,7 @@ text-gray-800 bg-white/10 backdrop-blur-sm rounded-xl shadow-sm border border-gr
             />
           </svg>
           <span>Back</span>
-        </a>
+        </Link>
 
         {/* Header */}
         <div className="text-center mb-6">

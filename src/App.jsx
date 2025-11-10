@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { HashRouter, Routes, Route } from "react-router-dom";
 import Home from "./components/Home";
 import ProjectsPage from "./pages/ProjectsPage";
 import PixelBlast from "./components/PixelBlast";
@@ -35,14 +35,13 @@ function App() {
         />
       </div>
 
-      {/* Main content - positioned above background */}
       <div style={{ position: "relative", zIndex: 1 }}>
-        <Router basename="/personalPortfolio">
+        <HashRouter>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/projects" element={<ProjectsPage />} />
           </Routes>
-        </Router>
+        </HashRouter>
       </div>
     </div>
   );

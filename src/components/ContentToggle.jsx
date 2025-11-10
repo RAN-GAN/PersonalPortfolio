@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
 const ToggleButton = ({ active, onClick, children }) => (
   <button
@@ -35,12 +36,12 @@ const ContentToggle = ({ onToggle, activeView = "short" }) => {
       >
         Long
       </ToggleButton>
-      <a
-        href="/projects"
+      <Link
+        to="/projects"
         className="px-4 py-2 border-2 border-muted text-muted hover:border-accent hover:text-accent rounded-full bg-transparent cursor-pointer font-medium capitalize inline-flex items-center transition-all duration-300 no-underline"
       >
         Projects
-      </a>
+      </Link>
     </div>
   );
 };

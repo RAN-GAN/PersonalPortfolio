@@ -1,22 +1,38 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const LinkItem = ({ href, children, color, isExternal = false }) => {
-  const props = {
-    className:
-      "link-item text-primary text-lg font-medium cursor-pointer transition-all duration-200 underline decoration-2 underline-offset-2 border-none bg-transparent p-0 hover:opacity-70 hover:text-muted",
-    style: { "--decoration-color": color },
-    ...(isExternal && { target: "_blank", rel: "noopener noreferrer" }),
-  };
+  const className =
+    "link-item text-primary text-lg font-medium cursor-pointer transition-all duration-200 underline decoration-2 underline-offset-2 border-none bg-transparent p-0 hover:opacity-70 hover:text-muted";
+  const style = { "--decoration-color": color };
+
+  // internal route (use react-router Link)
+  if (href && !href.startsWith("http") && !href.startsWith("#")) {
+    return (
+      <Link to={href} className={className} style={style}>
+        {children}
+      </Link>
+    );
+  }
 
   if (href) {
     return (
-      <a href={href} {...props}>
+      <a
+        href={href}
+        className={className}
+        style={style}
+        {...(isExternal && { target: "_blank", rel: "noopener noreferrer" })}
+      >
         {children}
       </a>
     );
   }
 
-  return <button {...props}>{children}</button>;
+  return (
+    <button className={className} style={style}>
+      {children}
+    </button>
+  );
 };
 
 const LinkGrid = ({ links }) => {

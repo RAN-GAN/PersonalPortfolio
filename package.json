@@ -3,7 +3,11 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://ran-gan.github.io/personalPortfolio",
+  "homepage": "https://ran-gan.github.io/PersonalPortfolio",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ran-gan/PersonalPortfolio.git"
+  },
   "scripts": {
     "dev": "vite --host",
     "build": "vite build",
