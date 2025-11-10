@@ -37,7 +37,7 @@ function App() {
 
       {/* Main content - positioned above background */}
       <div style={{ position: "relative", zIndex: 1 }}>
-        <Router>
+        <Router basename="/personalPortfolio">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/projects" element={<ProjectsPage />} />
