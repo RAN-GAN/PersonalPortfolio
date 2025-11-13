@@ -28,7 +28,7 @@ const PERSONAL_DATA = {
     {
       text: "resume",
       href: "/PradeepChandranM-11-13-2025.pdf",
-      color: "rgb(36, 208, 90)",
+      color: "rgb(236, 2, 90)",
       download: true,
     },
   ],
