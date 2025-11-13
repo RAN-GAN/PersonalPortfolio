@@ -79,7 +79,6 @@ text-gray-800 bg-white/10 backdrop-blur-sm rounded-xl shadow-sm border border-gr
           </svg>
           <span>Back</span>
         </Link>
-
         {/* Header */}
         <div className="text-center mb-6">
           <h1 className="text-2xl font-semibold">Artifacts</h1>
@@ -87,7 +86,9 @@ text-gray-800 bg-white/10 backdrop-blur-sm rounded-xl shadow-sm border border-gr
             Here are things I’m proud of.
           </p>
         </div>
-
+        <hr className="m-0.5" />
+        <hr className="m-0.5" />
+        <br />
         {/* Achievements */}
         <section className="mb-6">
           <h2 className="text-xl font-medium mb-2">Achievements</h2>
@@ -113,7 +114,6 @@ text-gray-800 bg-white/10 backdrop-blur-sm rounded-xl shadow-sm border border-gr
             ))}
           </ul>
         </section>
-
         {/* Projects */}
         <section className="mb-6">
           <h2 className="text-xl font-medium mb-2">Projects</h2>
@@ -140,7 +140,6 @@ text-gray-800 bg-white/10 backdrop-blur-sm rounded-xl shadow-sm border border-gr
             ))}
           </ul>
         </section>
-
         {/* Footer */}
         <p className="text-xs text-center text-gray-500 mt-6">
           For more projects and scripts, visit{" "}

@@ -24,7 +24,7 @@ const ContentToggle = ({ onToggle, activeView = "short" }) => {
 
   return (
     <div className="flex gap-3 justify-center flex-wrap">
-      <ToggleButton
+      {/* <ToggleButton
         active={active === "short"}
         onClick={() => handleToggle("short")}
       >
@@ -35,12 +35,18 @@ const ContentToggle = ({ onToggle, activeView = "short" }) => {
         onClick={() => handleToggle("long")}
       >
         Long
-      </ToggleButton>
+      </ToggleButton> */}
       <Link
         to="/projects"
         className="px-4 py-2 border-2 border-muted text-muted hover:border-accent hover:text-accent rounded-full bg-transparent cursor-pointer font-medium capitalize inline-flex items-center transition-all duration-300 no-underline"
       >
         Projects
+      </Link>
+      <Link
+        to="/miniprojects"
+        className="px-4 py-2 border-2 border-muted text-muted hover:border-accent hover:text-accent rounded-full bg-transparent cursor-pointer font-medium capitalize inline-flex items-center transition-all duration-300 no-underline"
+      >
+        Mini Projects
       </Link>
     </div>
   );

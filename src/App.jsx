@@ -3,7 +3,7 @@ import { HashRouter, Routes, Route } from "react-router-dom";
 import Home from "./components/Home";
 import ProjectsPage from "./pages/ProjectsPage";
 import PixelBlast from "./components/PixelBlast";
-
+import MiniProjectsPage from "./pages/MiniProjectsPage";
 function App() {
   return (
     <div className="min-h-screen relative font-medium">
@@ -40,6 +40,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/projects" element={<ProjectsPage />} />
+            <Route path="/miniprojects" element={<MiniProjectsPage />} />
           </Routes>
         </HashRouter>
       </div>
