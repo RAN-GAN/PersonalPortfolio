@@ -36,6 +36,12 @@ const ContentToggle = ({ onToggle, activeView = "short" }) => {
       >
         Long
       </ToggleButton> */}
+      {/* <Link
+        to="/techstack"
+        className="px-4 py-2 border-2 border-muted text-muted hover:border-accent hover:text-accent rounded-full bg-transparent cursor-pointer font-medium capitalize inline-flex items-center transition-all duration-300 no-underline"
+      >
+        Tech-stack
+      </Link> */}
       <Link
         to="/projects"
         className="px-4 py-2 border-2 border-muted text-muted hover:border-accent hover:text-accent rounded-full bg-transparent cursor-pointer font-medium capitalize inline-flex items-center transition-all duration-300 no-underline"

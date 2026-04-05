@@ -6,6 +6,16 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineConfig({
   plugins: [tailwindcss(), react()],
   base: "/PersonalPortfolio/",
+  server: {
+    proxy: {
+      "/api/now-playing": {
+        target: "https://curly-pine-356e.pradeepmojo1708.workers.dev",
+        changeOrigin: true,
+        secure: true,
+        rewrite: () => "/",
+      },
+    },
+  },
   build: {
     chunkSizeWarningLimit: 1000,
     rollupOptions: {

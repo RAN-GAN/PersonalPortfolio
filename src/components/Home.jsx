@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import ProfileImage from "./ProfileImage";
 import Header from "./Header";
 import LinkGrid from "./LinkGrid";
+import NowPlaying from "./NowPlaying";
 import ContentToggle from "./ContentToggle";
 import AboutSection from "./AboutSection";
 import profileImg from "../assets/profile.jpg";
@@ -27,7 +28,7 @@ const PERSONAL_DATA = {
     },
     {
       text: "resume",
-      href: "/PradeepChandranM-11-13-2025.pdf",
+      href: "/PersonalPortfolio/PradeepChandranM.pdf",
       color: "rgb(236, 2, 90)",
       download: true,
     },
@@ -61,6 +62,8 @@ function Home() {
       </div>
 
       <LinkGrid links={PERSONAL_DATA.links} />
+
+      <NowPlaying />
 
       <ContentToggle onToggle={handleContentToggle} />
 
