@@ -1,9 +1,17 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 
+const NOW_PLAYING_ORIGIN =
+  "https://curly-pine-356e.pradeepmojo1708.workers.dev/";
 const NOW_PLAYING_ENDPOINT = import.meta.env.DEV
   ? "/api/now-playing"
-  : "https://curly-pine-356e.pradeepmojo1708.workers.dev/";
+  : NOW_PLAYING_ORIGIN;
+const NOW_PLAYING_FALLBACK_ENDPOINTS = import.meta.env.DEV
+  ? []
+  : [
+      `https://api.allorigins.win/raw?url=${encodeURIComponent(NOW_PLAYING_ORIGIN)}`,
+      `https://api.codetabs.com/v1/proxy/?quest=${encodeURIComponent(NOW_PLAYING_ORIGIN)}`,
+    ];
 const REFRESH_INTERVAL_MS = 120000;
 const TRANSITION_DURATION_MS = 200;
 
@@ -75,6 +83,38 @@ function normalizeTrack(payload) {
   };
 }
 
+async function fetchNowPlayingPayload({ signal }) {
+  const endpointChain = [
+    NOW_PLAYING_ENDPOINT,
+    ...NOW_PLAYING_FALLBACK_ENDPOINTS,
+  ];
+  let lastError = null;
+
+  for (const endpoint of endpointChain) {
+    try {
+      const response = await fetch(endpoint, {
+        method: "GET",
+        signal,
+        cache: "no-store",
+      });
+
+      if (!response.ok) {
+        throw new Error(`Now playing request failed (${response.status})`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      if (error.name === "AbortError") {
+        throw error;
+      }
+
+      lastError = error;
+    }
+  }
+
+  throw lastError || new Error("Unable to fetch now playing status");
+}
+
 function NowPlaying() {
   const prefersReducedMotion = useReducedMotion();
   const [track, setTrack] = useState(EMPTY_TRACK);
@@ -121,17 +161,9 @@ function NowPlaying() {
     abortRef.current = controller;
 
     try {
-      const response = await fetch(NOW_PLAYING_ENDPOINT, {
-        method: "GET",
+      const payload = await fetchNowPlayingPayload({
         signal: controller.signal,
-        cache: "no-store",
       });
-
-      if (!response.ok) {
-        throw new Error("Unable to fetch now playing status");
-      }
-
-      const payload = await response.json();
       const nextTrack = normalizeTrack(payload);
       applyTrackWithTransition(nextTrack);
     } catch (error) {
