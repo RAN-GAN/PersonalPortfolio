@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
-
+let currentSong = null;
 const NOW_PLAYING_ORIGIN =
   "https://curly-pine-356e.pradeepmojo1708.workers.dev/";
 const NOW_PLAYING_ENDPOINT = import.meta.env.DEV
@@ -12,7 +12,7 @@ const NOW_PLAYING_FALLBACK_ENDPOINTS = import.meta.env.DEV
       `https://api.allorigins.win/raw?url=${encodeURIComponent(NOW_PLAYING_ORIGIN)}`,
       `https://api.codetabs.com/v1/proxy/?quest=${encodeURIComponent(NOW_PLAYING_ORIGIN)}`,
     ];
-const REFRESH_INTERVAL_MS = 1200;
+const REFRESH_INTERVAL_MS = 20000;
 const TRANSITION_DURATION_MS = 200;
 
 const WAVE_BAR_COUNT = 28;
@@ -84,21 +84,55 @@ async function fetchNowPlayingPayload({ signal }) {
     NOW_PLAYING_ENDPOINT,
     ...NOW_PLAYING_FALLBACK_ENDPOINTS,
   ];
+
   let lastError = null;
+
   for (const endpoint of endpointChain) {
     try {
-      const response = await fetch(endpoint, {
+      let url = endpoint;
+
+      if (currentSong) {
+        const params = new URLSearchParams({
+          song: currentSong.title,
+          artist: currentSong.artist,
+        });
+        url += `?${params.toString()}`;
+      }
+
+      const response = await fetch(url, {
         method: "GET",
         signal,
         cache: "no-store",
       });
+
       if (!response.ok) throw new Error(`Failed (${response.status})`);
-      return await response.json();
+
+      const result = await response.json();
+
+      if (result.status === "no_change") {
+        return null;
+      }
+
+      if (result.status === "updated") {
+        currentSong = {
+          title: result.data.title,
+          artist: result.data.artist,
+        };
+        return result.data;
+      }
+
+      if (result.status === "empty") {
+        currentSong = null;
+        return null;
+      }
+
+      return null;
     } catch (error) {
       if (error.name === "AbortError") throw error;
       lastError = error;
     }
   }
+
   throw lastError || new Error("Unable to fetch now playing status");
 }
 
@@ -144,7 +178,10 @@ function NowPlaying() {
       const payload = await fetchNowPlayingPayload({
         signal: controller.signal,
       });
-      applyTrackWithTransition(normalizeTrack(payload));
+
+      if (payload) {
+        applyTrackWithTransition(normalizeTrack(payload));
+      }
     } catch (error) {
       if (error.name === "AbortError") return;
       if (identityRef.current === EMPTY_TRACK.identity) setTrack(EMPTY_TRACK);
@@ -223,7 +260,7 @@ function NowPlaying() {
                   color: "rgba(255,255,255,0.5)",
                 }}
               >
-                Pradee is Now listening
+                Pradeep is Now listening
               </p>
 
               <div className="flex items-center gap-[8px]">
