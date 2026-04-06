@@ -12,7 +12,7 @@ const NOW_PLAYING_FALLBACK_ENDPOINTS = import.meta.env.DEV
       `https://api.allorigins.win/raw?url=${encodeURIComponent(NOW_PLAYING_ORIGIN)}`,
       `https://api.codetabs.com/v1/proxy/?quest=${encodeURIComponent(NOW_PLAYING_ORIGIN)}`,
     ];
-const REFRESH_INTERVAL_MS = 120000;
+const REFRESH_INTERVAL_MS = 1200;
 const TRANSITION_DURATION_MS = 200;
 
 const WAVE_BAR_COUNT = 28;
@@ -46,32 +46,28 @@ const mimeTypeByBase64Prefix = {
 };
 
 function getMimeType(base64Value) {
-  const signature = base64Value.slice(0, 5);
+  // Strip whitespace/newlines before checking prefix
+  const clean = base64Value.replace(/\s/g, "");
+  const signature = clean.slice(0, 5);
   return mimeTypeByBase64Prefix[signature] || "image/jpeg";
 }
 
 function toDataUrl(imageValue) {
-  if (!imageValue || typeof imageValue !== "string") {
-    return "";
-  }
-
-  if (imageValue.startsWith("data:image")) {
-    return imageValue;
-  }
-
-  const mimeType = getMimeType(imageValue);
-  return `data:${mimeType};base64,${imageValue}`;
+  if (!imageValue || typeof imageValue !== "string") return "";
+  const clean = imageValue.replace(/\s/g, "");
+  if (clean.startsWith("data:image")) return clean;
+  return `data:${getMimeType(clean)};base64,${clean}`;
 }
 
 function normalizeTrack(payload) {
   const title = typeof payload?.title === "string" ? payload.title.trim() : "";
   const artist =
     typeof payload?.artist === "string" ? payload.artist.trim() : "";
-  const image = typeof payload?.image === "string" ? payload.image.trim() : "";
+  const image = typeof payload?.image === "string" ? payload.image : "";
+  // payload uses "status": "playing" | "stopped" (not a boolean)
+  const isPlaying = payload?.status === "playing";
 
-  if (!title || !artist) {
-    return EMPTY_TRACK;
-  }
+  if (!isPlaying || !title || !artist) return EMPTY_TRACK;
 
   const imageUrl = toDataUrl(image);
   return {
@@ -79,7 +75,7 @@ function normalizeTrack(payload) {
     artist,
     imageUrl,
     isPlaying: true,
-    identity: `${title.toLowerCase()}|${artist.toLowerCase()}|${image.slice(0, 24)}`,
+    identity: `${title.toLowerCase()}|${artist.toLowerCase()}|${image.replace(/\s/g, "").slice(0, 24)}`,
   };
 }
 
@@ -89,7 +85,6 @@ async function fetchNowPlayingPayload({ signal }) {
     ...NOW_PLAYING_FALLBACK_ENDPOINTS,
   ];
   let lastError = null;
-
   for (const endpoint of endpointChain) {
     try {
       const response = await fetch(endpoint, {
@@ -97,21 +92,13 @@ async function fetchNowPlayingPayload({ signal }) {
         signal,
         cache: "no-store",
       });
-
-      if (!response.ok) {
-        throw new Error(`Now playing request failed (${response.status})`);
-      }
-
+      if (!response.ok) throw new Error(`Failed (${response.status})`);
       return await response.json();
     } catch (error) {
-      if (error.name === "AbortError") {
-        throw error;
-      }
-
+      if (error.name === "AbortError") throw error;
       lastError = error;
     }
   }
-
   throw lastError || new Error("Unable to fetch now playing status");
 }
 
@@ -127,26 +114,20 @@ function NowPlaying() {
 
   const waveBars = useMemo(
     () =>
-      Array.from({ length: WAVE_BAR_COUNT }, (_, index) => ({
-        duration: `${WAVE_DURATIONS[index]}s`,
-        delay: `${WAVE_DELAYS[index]}s`,
-        height: `${WAVE_HEIGHTS[index]}%`,
+      Array.from({ length: WAVE_BAR_COUNT }, (_, i) => ({
+        duration: `${WAVE_DURATIONS[i]}s`,
+        delay: `${WAVE_DELAYS[i]}s`,
+        height: `${WAVE_HEIGHTS[i]}%`,
       })),
     [],
   );
 
   const applyTrackWithTransition = (nextTrack) => {
-    const hasChanged = identityRef.current !== nextTrack.identity;
-
-    if (!hasChanged) {
+    if (identityRef.current === nextTrack.identity) {
       setTrack(nextTrack);
       return;
     }
-
-    if (transitionRef.current) {
-      clearTimeout(transitionRef.current);
-    }
-
+    if (transitionRef.current) clearTimeout(transitionRef.current);
     setIsTransitioning(true);
     transitionRef.current = setTimeout(() => {
       identityRef.current = nextTrack.identity;
@@ -159,21 +140,14 @@ function NowPlaying() {
     abortRef.current?.abort();
     const controller = new AbortController();
     abortRef.current = controller;
-
     try {
       const payload = await fetchNowPlayingPayload({
         signal: controller.signal,
       });
-      const nextTrack = normalizeTrack(payload);
-      applyTrackWithTransition(nextTrack);
+      applyTrackWithTransition(normalizeTrack(payload));
     } catch (error) {
-      if (error.name === "AbortError") {
-        return;
-      }
-
-      if (identityRef.current === EMPTY_TRACK.identity) {
-        setTrack(EMPTY_TRACK);
-      }
+      if (error.name === "AbortError") return;
+      if (identityRef.current === EMPTY_TRACK.identity) setTrack(EMPTY_TRACK);
     } finally {
       setIsLoading(false);
     }
@@ -182,227 +156,213 @@ function NowPlaying() {
   useEffect(() => {
     fetchNowPlaying();
     intervalRef.current = setInterval(fetchNowPlaying, REFRESH_INTERVAL_MS);
-
     return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
-      if (transitionRef.current) {
-        clearTimeout(transitionRef.current);
-      }
+      if (intervalRef.current) clearInterval(intervalRef.current);
+      if (transitionRef.current) clearTimeout(transitionRef.current);
       abortRef.current?.abort();
     };
   }, []);
 
-  const bottomLabel = track.isPlaying
-    ? `Playing · ${track.artist}`
-    : "No track playing";
   const isPlaying = track.isPlaying;
 
-  const toneClass = isPlaying
-    ? {
-        // PLAYING → dynamic background → needs stronger contrast
-        card: "bg-white/10 border-white/20 backdrop-blur-xl",
-        overlay: "bg-black/30",
-
-        label: "text-white/70 drop-shadow-[0_1px_1px_rgba(0,0,0,0.5)]",
-        title: "text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.7)]",
-        artist: "text-white/85 drop-shadow-[0_1px_3px_rgba(0,0,0,0.6)]",
-
-        wave: "bg-white/80",
-        divider: "bg-white/25",
-
-        bottom: "text-white/75",
-        icon: "text-white/85",
-      }
-    : {
-        // NOT PLAYING → no image → needs subtle structure, not transparency chaos
-        card: "bg-white/40 border-black/10 backdrop-blur-md",
-        overlay: "bg-white/30",
-
-        label: "text-black/60",
-        title: "text-black",
-        artist: "text-black/70",
-
-        wave: "bg-black/60",
-        divider: "bg-black/10",
-
-        bottom: "text-black/60",
-        icon: "text-black/70",
-      };
   return (
     <section className="w-full flex justify-center" aria-live="polite">
-      <div
-        className={`group relative w-full max-w-[400px] overflow-hidden rounded-[22px] border backdrop-blur-2xl transition-all duration-300 hover:-translate-y-0.5 ${toneClass.card}`}
-      >
+      <div className="relative w-full max-w-[400px] overflow-hidden rounded-[20px] transition-all duration-300 hover:-translate-y-0.5">
+        {/* Album art — full bleed, no blur */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div
+            className="absolute inset-0 transition-opacity duration-700"
+            style={{
+              backgroundImage: track.imageUrl
+                ? `url(${track.imageUrl})`
+                : "none",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              opacity: isPlaying ? 1 : 0,
+              filter: "blur(20px)", // 👈 blur strength
+              transform: "scale(1.1)", // 👈 prevents edge cut after blur
+            }}
+            aria-hidden="true"
+          />
+        </div>
+
+        {/* Fallback dark bg when not playing */}
         <div
-          className={`absolute inset-0 bg-cover bg-center transition-opacity duration-700 ${
-            isPlaying ? "opacity-100" : "opacity-0"
-          }`}
+          className="absolute inset-0 transition-opacity duration-700"
           style={{
-            backgroundImage: track.imageUrl ? `url(${track.imageUrl})` : "none",
-            transform: "scale(1.18)",
-            filter: "blur(30px) saturate(1.8) brightness(0.45)",
+            background: "linear-gradient(135deg, #1a1a24 0%, #252530 100%)",
+            opacity: isPlaying ? 0 : 1,
           }}
           aria-hidden="true"
         />
 
+        {/* Bottom-heavy scrim so text is always readable */}
         <div
-          className={`absolute inset-0 ${toneClass.overlay}`}
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(to bottom, rgba(0,0,0,0.06) 0%, rgba(0,0,0,0.42) 50%, rgba(0,0,0,0.76) 100%)",
+          }}
           aria-hidden="true"
         />
 
-        <div className="relative z-10 rounded-[22px] border border-white/10 p-4 sm:px-4 sm:py-[13px]">
-          <div className="flex items-center gap-[13px]">
-            <div className="relative h-[60px] w-[60px] shrink-0">
+        {/* Content */}
+        <div
+          className="relative z-10 flex flex-col justify-between p-4"
+          style={{ minHeight: "130px" }}
+        >
+          {/* Top: label + dot + refresh */}
+          <div className="flex items-center justify-between">
+            <p
+              style={{
+                margin: 0,
+                fontSize: "9px",
+                fontWeight: 500,
+                textTransform: "uppercase",
+                letterSpacing: "0.2em",
+                color: "rgba(255,255,255,0.5)",
+              }}
+            >
+              Pradee is Now listening
+            </p>
+
+            <div className="flex items-center gap-[8px]">
               <motion.div
-                className={`relative h-[60px] w-[60px] overflow-hidden border bg-[rgba(120,120,140,0.15)] ${
-                  isPlaying
-                    ? "rounded-full border-white/20"
-                    : "rounded-xl border-black/10"
-                }`}
+                className="rounded-full"
+                style={{
+                  width: "7px",
+                  height: "7px",
+                  background: isPlaying ? "#34d399" : "rgba(255,255,255,0.2)",
+                }}
                 animate={
-                  prefersReducedMotion
+                  prefersReducedMotion || !isPlaying
                     ? undefined
-                    : isPlaying
-                      ? { rotate: 360 }
-                      : { rotate: 0 }
-                }
-                transition={
-                  prefersReducedMotion || !isPlaying
-                    ? { duration: 0 }
-                    : { duration: 9, ease: "linear", repeat: Infinity }
-                }
-              >
-                {track.imageUrl ? (
-                  <img
-                    src={track.imageUrl}
-                    alt={
-                      track.isPlaying ? `${track.title} album art` : "Album art"
-                    }
-                    className="h-full w-full object-cover"
-                  />
-                ) : (
-                  <div className="flex h-full w-full items-center justify-center text-[10px] uppercase tracking-[0.14em] text-black/35">
-                    idle
-                  </div>
-                )}
-              </motion.div>
-              <div
-                className={`pointer-events-none absolute left-1/2 top-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full border-[1.5px] border-white/25 bg-slate-950/90 transition-opacity duration-300 ${
-                  isPlaying ? "opacity-100" : "opacity-0"
-                }`}
-              />
-            </div>
-
-            <div className="min-w-0 flex-1">
-              <p
-                className={`m-0 text-[9px] font-medium uppercase tracking-[0.2em] ${toneClass.label}`}
-              >
-                Now listening
-              </p>
-              <div
-                className={`transition-all duration-200 ${isTransitioning ? "opacity-0 translate-y-1" : "opacity-100 translate-y-0"}`}
-                key={track.identity}
-              >
-                <p
-                  className={`m-0 truncate text-[20px] font-semibold leading-[1.15] tracking-[-0.01em] ${toneClass.title}`}
-                >
-                  {isLoading && !track.isPlaying
-                    ? "Checking music..."
-                    : track.title}
-                </p>
-                <p
-                  className={`mt-1 truncate text-[13px] leading-[1.35] ${toneClass.artist}`}
-                >
-                  {isLoading && !track.isPlaying ? "Please wait" : track.artist}
-                </p>
-              </div>
-            </div>
-
-            <motion.div
-              className={`h-[7px] w-[7px] shrink-0 rounded-full ${
-                isPlaying ? "bg-emerald-400" : "bg-slate-400/60"
-              }`}
-              animate={
-                prefersReducedMotion || !isPlaying
-                  ? undefined
-                  : {
-                      boxShadow: [
-                        "0 0 0 0 rgba(52,211,153,0.5)",
-                        "0 0 0 6px rgba(52,211,153,0)",
-                        "0 0 0 0 rgba(52,211,153,0)",
-                      ],
-                    }
-              }
-              transition={
-                prefersReducedMotion || !isPlaying
-                  ? { duration: 0 }
-                  : { duration: 2, ease: "easeOut", repeat: Infinity }
-              }
-              aria-hidden="true"
-            />
-          </div>
-
-          <div
-            className={`mt-3 flex h-4 items-end gap-[2.5px] ${isPlaying ? "opacity-100" : "opacity-40"}`}
-            aria-hidden="true"
-          >
-            {waveBars.map((bar, index) => (
-              <motion.span
-                key={`wave-${index}`}
-                className={`flex-1 rounded-sm ${toneClass.wave}`}
-                animate={
-                  prefersReducedMotion || !isPlaying
-                    ? { scaleY: 0.3 }
-                    : { scaleY: [0.3, 1, 0.3] }
-                }
-                transition={
-                  prefersReducedMotion || !isPlaying
-                    ? { duration: 0 }
                     : {
-                        duration: Number.parseFloat(bar.duration),
-                        delay: Number.parseFloat(bar.delay),
-                        repeat: Infinity,
-                        ease: "easeInOut",
+                        boxShadow: [
+                          "0 0 0 0 rgba(52,211,153,0.5)",
+                          "0 0 0 6px rgba(52,211,153,0)",
+                          "0 0 0 0 rgba(52,211,153,0)",
+                        ],
                       }
                 }
-                style={{
-                  height: bar.height,
-                  transformOrigin: "bottom",
-                }}
+                transition={
+                  prefersReducedMotion || !isPlaying
+                    ? { duration: 0 }
+                    : { duration: 2, ease: "easeOut", repeat: Infinity }
+                }
+                aria-hidden="true"
               />
-            ))}
+
+              <button
+                type="button"
+                style={{
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  padding: "2px",
+                  color: "rgba(255,255,255,0.5)",
+                  display: "flex",
+                  alignItems: "center",
+                  transition: "opacity 0.2s",
+                }}
+                title="Refresh"
+                onClick={fetchNowPlaying}
+                onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.4")}
+                onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  width="11"
+                  height="11"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <polyline points="23 4 23 10 17 10" />
+                  <polyline points="1 20 1 14 7 14" />
+                  <path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15" />
+                </svg>
+              </button>
+            </div>
           </div>
 
-          <div className={`my-[9px] h-px ${toneClass.divider}`} />
-
-          <div className="flex items-center justify-between">
-            <span
-              className={`text-[10.5px] tracking-[0.04em] ${toneClass.bottom}`}
+          {/* Bottom: title + artist + waveform */}
+          <div className="mt-4">
+            <div
+              className={`transition-all duration-200 ${
+                isTransitioning
+                  ? "opacity-0 translate-y-1"
+                  : "opacity-100 translate-y-0"
+              }`}
+              key={track.identity}
             >
-              {bottomLabel}
-            </span>
-            <button
-              type="button"
-              className={`rounded-md p-[3px] transition-opacity duration-200 hover:opacity-60 ${toneClass.icon}`}
-              title="Refresh"
-              onClick={fetchNowPlaying}
-            >
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                className="h-3 w-3"
-                stroke="currentColor"
-                strokeWidth="1.8"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+              <p
+                style={{
+                  margin: 0,
+                  fontSize: "22px",
+                  fontWeight: 700,
+                  lineHeight: 1.15,
+                  letterSpacing: "-0.02em",
+                  color: "#fff",
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  textShadow: "0 2px 12px rgba(0,0,0,0.5)",
+                }}
               >
-                <polyline points="23 4 23 10 17 10" />
-                <polyline points="1 20 1 14 7 14" />
-                <path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15" />
-              </svg>
-            </button>
+                {isLoading ? "Checking…" : track.title}
+              </p>
+              <p
+                style={{
+                  margin: "4px 0 0",
+                  fontSize: "13px",
+                  fontWeight: 400,
+                  color: "rgba(255,255,255,0.72)",
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  textShadow: "0 1px 6px rgba(0,0,0,0.5)",
+                }}
+              >
+                {isLoading ? "Please wait" : track.artist}
+              </p>
+            </div>
+
+            {/* Waveform */}
+            <div
+              className="mt-3 flex items-end gap-[2.5px]"
+              style={{ height: "20px", opacity: isPlaying ? 1 : 0.2 }}
+              aria-hidden="true"
+            >
+              {waveBars.map((bar, index) => (
+                <motion.span
+                  key={`wave-${index}`}
+                  className="flex-1 rounded-sm"
+                  style={{
+                    height: bar.height,
+                    transformOrigin: "bottom",
+                    background: "rgba(255,255,255,0.7)",
+                  }}
+                  animate={
+                    prefersReducedMotion || !isPlaying
+                      ? { scaleY: 0.3 }
+                      : { scaleY: [0.3, 1, 0.3] }
+                  }
+                  transition={
+                    prefersReducedMotion || !isPlaying
+                      ? { duration: 0 }
+                      : {
+                          duration: Number.parseFloat(bar.duration),
+                          delay: Number.parseFloat(bar.delay),
+                          repeat: Infinity,
+                          ease: "easeInOut",
+                        }
+                  }
+                />
+              ))}
+            </div>
           </div>
         </div>
       </div>
