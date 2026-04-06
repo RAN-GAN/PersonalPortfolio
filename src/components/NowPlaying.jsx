@@ -164,210 +164,213 @@ function NowPlaying() {
   }, []);
 
   const isPlaying = track.isPlaying;
+  if (isPlaying) {
+    return (
+      <section className="w-full flex justify-center" aria-live="polite">
+        <div className="relative w-full max-w-[400px] overflow-hidden rounded-[20px] transition-all duration-300 hover:-translate-y-0.5">
+          {/* Album art — full bleed, no blur */}
+          <div className="absolute inset-0 overflow-hidden">
+            <div
+              className="absolute inset-0 transition-opacity duration-700"
+              style={{
+                backgroundImage: track.imageUrl
+                  ? `url(${track.imageUrl})`
+                  : "none",
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                opacity: isPlaying ? 1 : 0,
+                filter: "blur(20px)", // 👈 blur strength
+                transform: "scale(1.1)", // 👈 prevents edge cut after blur
+              }}
+              aria-hidden="true"
+            />
+          </div>
 
-  return (
-    <section className="w-full flex justify-center" aria-live="polite">
-      <div className="relative w-full max-w-[400px] overflow-hidden rounded-[20px] transition-all duration-300 hover:-translate-y-0.5">
-        {/* Album art — full bleed, no blur */}
-        <div className="absolute inset-0 overflow-hidden">
+          {/* Fallback dark bg when not playing */}
           <div
             className="absolute inset-0 transition-opacity duration-700"
             style={{
-              backgroundImage: track.imageUrl
-                ? `url(${track.imageUrl})`
-                : "none",
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-              opacity: isPlaying ? 1 : 0,
-              filter: "blur(20px)", // 👈 blur strength
-              transform: "scale(1.1)", // 👈 prevents edge cut after blur
+              background: "linear-gradient(135deg, #1a1a24 0%, #252530 100%)",
+              opacity: isPlaying ? 0 : 1,
             }}
             aria-hidden="true"
           />
-        </div>
 
-        {/* Fallback dark bg when not playing */}
-        <div
-          className="absolute inset-0 transition-opacity duration-700"
-          style={{
-            background: "linear-gradient(135deg, #1a1a24 0%, #252530 100%)",
-            opacity: isPlaying ? 0 : 1,
-          }}
-          aria-hidden="true"
-        />
+          {/* Bottom-heavy scrim so text is always readable */}
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                "linear-gradient(to bottom, rgba(0,0,0,0.06) 0%, rgba(0,0,0,0.42) 50%, rgba(0,0,0,0.76) 100%)",
+            }}
+            aria-hidden="true"
+          />
 
-        {/* Bottom-heavy scrim so text is always readable */}
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "linear-gradient(to bottom, rgba(0,0,0,0.06) 0%, rgba(0,0,0,0.42) 50%, rgba(0,0,0,0.76) 100%)",
-          }}
-          aria-hidden="true"
-        />
-
-        {/* Content */}
-        <div
-          className="relative z-10 flex flex-col justify-between p-4"
-          style={{ minHeight: "130px" }}
-        >
-          {/* Top: label + dot + refresh */}
-          <div className="flex items-center justify-between">
-            <p
-              style={{
-                margin: 0,
-                fontSize: "9px",
-                fontWeight: 500,
-                textTransform: "uppercase",
-                letterSpacing: "0.2em",
-                color: "rgba(255,255,255,0.5)",
-              }}
-            >
-              Pradee is Now listening
-            </p>
-
-            <div className="flex items-center gap-[8px]">
-              <motion.div
-                className="rounded-full"
-                style={{
-                  width: "7px",
-                  height: "7px",
-                  background: isPlaying ? "#34d399" : "rgba(255,255,255,0.2)",
-                }}
-                animate={
-                  prefersReducedMotion || !isPlaying
-                    ? undefined
-                    : {
-                        boxShadow: [
-                          "0 0 0 0 rgba(52,211,153,0.5)",
-                          "0 0 0 6px rgba(52,211,153,0)",
-                          "0 0 0 0 rgba(52,211,153,0)",
-                        ],
-                      }
-                }
-                transition={
-                  prefersReducedMotion || !isPlaying
-                    ? { duration: 0 }
-                    : { duration: 2, ease: "easeOut", repeat: Infinity }
-                }
-                aria-hidden="true"
-              />
-
-              <button
-                type="button"
-                style={{
-                  background: "none",
-                  border: "none",
-                  cursor: "pointer",
-                  padding: "2px",
-                  color: "rgba(255,255,255,0.5)",
-                  display: "flex",
-                  alignItems: "center",
-                  transition: "opacity 0.2s",
-                }}
-                title="Refresh"
-                onClick={fetchNowPlaying}
-                onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.4")}
-                onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
-              >
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  width="11"
-                  height="11"
-                  stroke="currentColor"
-                  strokeWidth="1.8"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <polyline points="23 4 23 10 17 10" />
-                  <polyline points="1 20 1 14 7 14" />
-                  <path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15" />
-                </svg>
-              </button>
-            </div>
-          </div>
-
-          {/* Bottom: title + artist + waveform */}
-          <div className="mt-4">
-            <div
-              className={`transition-all duration-200 ${
-                isTransitioning
-                  ? "opacity-0 translate-y-1"
-                  : "opacity-100 translate-y-0"
-              }`}
-              key={track.identity}
-            >
+          {/* Content */}
+          <div
+            className="relative z-10 flex flex-col justify-between p-4"
+            style={{ minHeight: "130px" }}
+          >
+            {/* Top: label + dot + refresh */}
+            <div className="flex items-center justify-between">
               <p
                 style={{
                   margin: 0,
-                  fontSize: "22px",
-                  fontWeight: 700,
-                  lineHeight: 1.15,
-                  letterSpacing: "-0.02em",
-                  color: "#fff",
-                  whiteSpace: "nowrap",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                  textShadow: "0 2px 12px rgba(0,0,0,0.5)",
+                  fontSize: "9px",
+                  fontWeight: 500,
+                  textTransform: "uppercase",
+                  letterSpacing: "0.2em",
+                  color: "rgba(255,255,255,0.5)",
                 }}
               >
-                {isLoading ? "Checking…" : track.title}
+                Pradee is Now listening
               </p>
-              <p
-                style={{
-                  margin: "4px 0 0",
-                  fontSize: "13px",
-                  fontWeight: 400,
-                  color: "rgba(255,255,255,0.72)",
-                  whiteSpace: "nowrap",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                  textShadow: "0 1px 6px rgba(0,0,0,0.5)",
-                }}
-              >
-                {isLoading ? "Please wait" : track.artist}
-              </p>
-            </div>
 
-            {/* Waveform */}
-            <div
-              className="mt-3 flex items-end gap-[2.5px]"
-              style={{ height: "20px", opacity: isPlaying ? 1 : 0.2 }}
-              aria-hidden="true"
-            >
-              {waveBars.map((bar, index) => (
-                <motion.span
-                  key={`wave-${index}`}
-                  className="flex-1 rounded-sm"
+              <div className="flex items-center gap-[8px]">
+                <motion.div
+                  className="rounded-full"
                   style={{
-                    height: bar.height,
-                    transformOrigin: "bottom",
-                    background: "rgba(255,255,255,0.7)",
+                    width: "7px",
+                    height: "7px",
+                    background: isPlaying ? "#34d399" : "rgba(255,255,255,0.2)",
                   }}
                   animate={
                     prefersReducedMotion || !isPlaying
-                      ? { scaleY: 0.3 }
-                      : { scaleY: [0.3, 1, 0.3] }
+                      ? undefined
+                      : {
+                          boxShadow: [
+                            "0 0 0 0 rgba(52,211,153,0.5)",
+                            "0 0 0 6px rgba(52,211,153,0)",
+                            "0 0 0 0 rgba(52,211,153,0)",
+                          ],
+                        }
                   }
                   transition={
                     prefersReducedMotion || !isPlaying
                       ? { duration: 0 }
-                      : {
-                          duration: Number.parseFloat(bar.duration),
-                          delay: Number.parseFloat(bar.delay),
-                          repeat: Infinity,
-                          ease: "easeInOut",
-                        }
+                      : { duration: 2, ease: "easeOut", repeat: Infinity }
                   }
+                  aria-hidden="true"
                 />
-              ))}
+
+                <button
+                  type="button"
+                  style={{
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                    padding: "2px",
+                    color: "rgba(255,255,255,0.5)",
+                    display: "flex",
+                    alignItems: "center",
+                    transition: "opacity 0.2s",
+                  }}
+                  title="Refresh"
+                  onClick={fetchNowPlaying}
+                  onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.4")}
+                  onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    width="11"
+                    height="11"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <polyline points="23 4 23 10 17 10" />
+                    <polyline points="1 20 1 14 7 14" />
+                    <path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            {/* Bottom: title + artist + waveform */}
+            <div className="mt-4">
+              <div
+                className={`transition-all duration-200 ${
+                  isTransitioning
+                    ? "opacity-0 translate-y-1"
+                    : "opacity-100 translate-y-0"
+                }`}
+                key={track.identity}
+              >
+                <p
+                  style={{
+                    margin: 0,
+                    fontSize: "22px",
+                    fontWeight: 700,
+                    lineHeight: 1.15,
+                    letterSpacing: "-0.02em",
+                    color: "#fff",
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    textShadow: "0 2px 12px rgba(0,0,0,0.5)",
+                  }}
+                >
+                  {isLoading ? "Checking…" : track.title}
+                </p>
+                <p
+                  style={{
+                    margin: "4px 0 0",
+                    fontSize: "13px",
+                    fontWeight: 400,
+                    color: "rgba(255,255,255,0.72)",
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    textShadow: "0 1px 6px rgba(0,0,0,0.5)",
+                  }}
+                >
+                  {isLoading ? "Please wait" : track.artist}
+                </p>
+              </div>
+
+              {/* Waveform */}
+              <div
+                className="mt-3 flex items-end gap-[2.5px]"
+                style={{ height: "20px", opacity: isPlaying ? 1 : 0.2 }}
+                aria-hidden="true"
+              >
+                {waveBars.map((bar, index) => (
+                  <motion.span
+                    key={`wave-${index}`}
+                    className="flex-1 rounded-sm"
+                    style={{
+                      height: bar.height,
+                      transformOrigin: "bottom",
+                      background: "rgba(255,255,255,0.7)",
+                    }}
+                    animate={
+                      prefersReducedMotion || !isPlaying
+                        ? { scaleY: 0.3 }
+                        : { scaleY: [0.3, 1, 0.3] }
+                    }
+                    transition={
+                      prefersReducedMotion || !isPlaying
+                        ? { duration: 0 }
+                        : {
+                            duration: Number.parseFloat(bar.duration),
+                            delay: Number.parseFloat(bar.delay),
+                            repeat: Infinity,
+                            ease: "easeInOut",
+                          }
+                    }
+                  />
+                ))}
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
-  );
+      </section>
+    );
+  }
+
+  return null;
 }
 
 export default NowPlaying;

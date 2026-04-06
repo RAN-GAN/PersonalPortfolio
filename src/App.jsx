@@ -5,6 +5,8 @@ import PixelBlast from "./components/PixelBlast";
 const Home = lazy(() => import("./components/Home"));
 const ProjectsPage = lazy(() => import("./pages/ProjectsPage"));
 const MiniProjectsPage = lazy(() => import("./pages/MiniProjectsPage"));
+const TechStackPage = lazy(() => import("./pages/TechStackPage"));
+const FreelancePortfolio = lazy(() => import("./pages/FreelancePortfolio"));
 
 function App() {
   return (
@@ -50,6 +52,8 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/projects" element={<ProjectsPage />} />
               <Route path="/miniprojects" element={<MiniProjectsPage />} />
+              {/* <Route path="/techstack" element={<TechStackPage />} /> */}
+              <Route path="/freelance" element={<FreelancePortfolio />} />
             </Routes>
           </Suspense>
         </HashRouter>
