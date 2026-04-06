@@ -6,13 +6,8 @@ const NOW_PLAYING_ORIGIN =
 const NOW_PLAYING_ENDPOINT = import.meta.env.DEV
   ? "/api/now-playing"
   : NOW_PLAYING_ORIGIN;
-const NOW_PLAYING_FALLBACK_ENDPOINTS = import.meta.env.DEV
-  ? []
-  : [
-      `https://api.allorigins.win/raw?url=${encodeURIComponent(NOW_PLAYING_ORIGIN)}`,
-      `https://api.codetabs.com/v1/proxy/?quest=${encodeURIComponent(NOW_PLAYING_ORIGIN)}`,
-    ];
-const REFRESH_INTERVAL_MS = 20000;
+
+const REFRESH_INTERVAL_MS = 100000;
 const TRANSITION_DURATION_MS = 200;
 
 const WAVE_BAR_COUNT = 28;
@@ -80,60 +75,48 @@ function normalizeTrack(payload) {
 }
 
 async function fetchNowPlayingPayload({ signal }) {
-  const endpointChain = [
-    NOW_PLAYING_ENDPOINT,
-    ...NOW_PLAYING_FALLBACK_ENDPOINTS,
-  ];
+  try {
+    let url = NOW_PLAYING_ENDPOINT;
 
-  let lastError = null;
-
-  for (const endpoint of endpointChain) {
-    try {
-      let url = endpoint;
-
-      if (currentSong) {
-        const params = new URLSearchParams({
-          song: currentSong.title,
-          artist: currentSong.artist,
-        });
-        url += `?${params.toString()}`;
-      }
-
-      const response = await fetch(url, {
-        method: "GET",
-        signal,
-        cache: "no-store",
+    if (currentSong?.title) {
+      const params = new URLSearchParams({
+        title: currentSong.title,
       });
-
-      if (!response.ok) throw new Error(`Failed (${response.status})`);
-
-      const result = await response.json();
-
-      if (result.status === "no_change") {
-        return null;
-      }
-
-      if (result.status === "updated") {
-        currentSong = {
-          title: result.data.title,
-          artist: result.data.artist,
-        };
-        return result.data;
-      }
-
-      if (result.status === "empty") {
-        currentSong = null;
-        return null;
-      }
-
-      return null;
-    } catch (error) {
-      if (error.name === "AbortError") throw error;
-      lastError = error;
+      url += `?${params.toString()}`;
     }
-  }
 
-  throw lastError || new Error("Unable to fetch now playing status");
+    const response = await fetch(url, {
+      method: "GET",
+      signal,
+      cache: "no-store",
+    });
+
+    if (!response.ok) throw new Error(`Failed (${response.status})`);
+
+    const result = await response.json();
+
+    if (result.status === "no_change") {
+      return { type: "no_change" };
+    }
+
+    if (result.status === "updated") {
+      currentSong = {
+        title: result.data.title,
+        artist: result.data.artist,
+      };
+      return { type: "updated", data: result.data };
+    }
+
+    if (result.status === "empty") {
+      currentSong = null;
+      return { type: "empty" };
+    }
+
+    return { type: "no_change" };
+  } catch (error) {
+    if (error.name === "AbortError") throw error;
+    throw error;
+  }
 }
 
 function NowPlaying() {
@@ -174,17 +157,24 @@ function NowPlaying() {
     abortRef.current?.abort();
     const controller = new AbortController();
     abortRef.current = controller;
+
     try {
-      const payload = await fetchNowPlayingPayload({
+      const result = await fetchNowPlayingPayload({
         signal: controller.signal,
       });
 
-      if (payload) {
-        applyTrackWithTransition(normalizeTrack(payload));
+      if (result.type === "updated") {
+        applyTrackWithTransition(normalizeTrack(result.data));
       }
+
+      if (result.type === "empty") {
+        applyTrackWithTransition(EMPTY_TRACK);
+      }
+
+      // if no_change → do nothing (correct behavior)
     } catch (error) {
       if (error.name === "AbortError") return;
-      if (identityRef.current === EMPTY_TRACK.identity) setTrack(EMPTY_TRACK);
+      setTrack(EMPTY_TRACK);
     } finally {
       setIsLoading(false);
     }
@@ -263,7 +253,7 @@ function NowPlaying() {
                 Pradeep is Now listening
               </p>
 
-              <div className="flex items-center gap-[8px]">
+              <div className="flex items-center gap-2">
                 <motion.div
                   className="rounded-full"
                   style={{
@@ -411,3 +401,5 @@ function NowPlaying() {
 }
 
 export default NowPlaying;
+
+
