@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 
-let currentSong = null;
 const NOW_PLAYING_ENDPOINT =
   "https://curly-pine-356e.pradeepmojo1708.workers.dev/";
 
@@ -31,12 +30,6 @@ const EMPTY_TRACK = {
   identity: "not-playing",
 };
 
-// ─── Gradient generation from title ────────────────────────────────────────
-
-/**
- * Maps a string to a stable hue (0–360) by summing char codes
- * with a positional prime multiplier for better spread.
- */
 function stringToHue(str) {
   let hash = 0;
   for (let i = 0; i < str.length; i++) {
@@ -45,47 +38,47 @@ function stringToHue(str) {
   return Math.abs(hash) % 360;
 }
 
-/**
- * Derives a secondary hue by rotating ~120–160° from the primary,
- * always picking the aesthetically richer direction.
- */
 function deriveSecondaryHue(primaryHue) {
-  // Prefer a "split-complementary" offset
   const offset = 120 + ((primaryHue * 7) % 50); // 120–170 range
   return (primaryHue + offset) % 360;
 }
 
-/**
- * Generates a beautiful Apple-style gradient CSS string
- * based purely on the track title.
- *
- * Strategy:
- *   - Primary hue  → derived from full title string
- *   - Secondary hue → split-complementary rotation
- *   - Both at high saturation (65–80 %), medium-low lightness (25–40 %)
- *     so white text always reads clearly on top
- */
 function titleToGradient(title) {
+  const GRADIENTS = [
+    ["#ff7e5f", "#feb47b"], // sunset
+    ["#6a11cb", "#2575fc"], // purple-blue
+    ["#00c6ff", "#0072ff"], // blue
+    ["#f7971e", "#ffd200"], // orange-yellow
+    ["#43cea2", "#185a9d"], // teal-blue
+    ["#ff4e50", "#f9d423"], // red-yellow
+    ["#30cfd0", "#330867"], // cyan-purple
+    ["#667eea", "#764ba2"], // soft indigo
+    ["#ff9a9e", "#fad0c4"], // pink soft
+    ["#a18cd1", "#fbc2eb"], // lavender
+    ["#fbc2eb", "#a6c1ee"], // pastel blend
+    ["#84fab0", "#8fd3f4"], // mint sky
+  ];
+
+  function hashString(str) {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+      hash = (hash * 31 + str.charCodeAt(i)) & 0xffffffff;
+    }
+    return Math.abs(hash);
+  }
+
+  // ✅ Logic is now directly in the outer function
   if (!title || title === "Not playing") {
-    return "linear-gradient(135deg, #1a1a24 0%, #252530 100%)";
+    return "linear-gradient(135deg, #1a1a24, #252530)";
   }
 
   const normalized = title.toLowerCase().trim();
-  const h1 = stringToHue(normalized);
-  const h2 = deriveSecondaryHue(h1);
+  const hash = hashString(normalized);
 
-  // Vary saturation & lightness slightly per title for more personality
-  const titleLen = normalized.length;
-  const s1 = 62 + (titleLen % 18); // 62–80 %
-  const l1 = 22 + ((h1 * 3) % 14); // 22–36 %
-  const s2 = 55 + ((h2 * 2) % 20); // 55–75 %
-  const l2 = 28 + ((h2 * 5) % 12); // 28–40 %
+  const [c1, c2] = GRADIENTS[hash % GRADIENTS.length];
 
-  const c1 = `hsl(${h1}, ${s1}%, ${l1}%)`;
-  const c2 = `hsl(${h2}, ${s2}%, ${l2}%)`;
-
-  // Angle varies slightly per title for uniqueness
-  const angle = 120 + (h1 % 60); // 120–180°
+  // subtle angle variation (keeps it interesting but safe)
+  const angle = 120 + (hash % 40);
 
   return `linear-gradient(${angle}deg, ${c1} 0%, ${c2} 100%)`;
 }
@@ -149,11 +142,11 @@ function normalizeTrack(payload) {
 
 // ─── Fetch ──────────────────────────────────────────────────────────────────
 
-async function fetchNowPlayingPayload({ signal }) {
+async function fetchNowPlayingPayload({ signal, currentSongTitle }) {
   try {
     let url = NOW_PLAYING_ENDPOINT;
-    if (currentSong?.title) {
-      const params = new URLSearchParams({ title: currentSong.title });
+    if (currentSongTitle) {
+      const params = new URLSearchParams({ title: currentSongTitle });
       url += `?${params.toString()}`;
     }
 
@@ -168,11 +161,9 @@ async function fetchNowPlayingPayload({ signal }) {
 
     if (result.status === "no_change") return { type: "no_change" };
     if (result.status === "updated") {
-      currentSong = { title: result.data.title, artist: result.data.artist };
       return { type: "updated", data: result.data };
     }
     if (result.status === "empty") {
-      currentSong = null;
       return { type: "empty" };
     }
     return { type: "no_change" };
@@ -193,6 +184,7 @@ function NowPlaying() {
   const abortRef = useRef(null);
   const transitionRef = useRef(null);
   const identityRef = useRef(EMPTY_TRACK.identity);
+  const currentlyPlayingTitleRef = useRef(null);
 
   const waveBars = useMemo(
     () =>
@@ -225,12 +217,19 @@ function NowPlaying() {
     try {
       const result = await fetchNowPlayingPayload({
         signal: controller.signal,
+        currentSongTitle: currentlyPlayingTitleRef.current,
       });
-      if (result.type === "updated")
+      if (result.type === "updated") {
+        currentlyPlayingTitleRef.current = result.data.title;
         applyTrackWithTransition(normalizeTrack(result.data));
-      if (result.type === "empty") applyTrackWithTransition(EMPTY_TRACK);
+      }
+      if (result.type === "empty") {
+        currentlyPlayingTitleRef.current = null;
+        applyTrackWithTransition(EMPTY_TRACK);
+      }
     } catch (error) {
       if (error.name === "AbortError") return;
+      currentlyPlayingTitleRef.current = null;
       setTrack(EMPTY_TRACK);
     } finally {
       setIsLoading(false);

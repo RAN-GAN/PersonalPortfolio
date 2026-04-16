@@ -3,6 +3,13 @@
 /* Global Styles */
 html {
   background-color: #efefef;
+  font-size: 100%;
+}
+
+@media (min-width: 1280px) {
+  html {
+    font-size: 130%;
+  }
 }
 
 body {

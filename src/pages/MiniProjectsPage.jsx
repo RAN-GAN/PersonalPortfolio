@@ -55,7 +55,7 @@ function MiniProjectsPage() {
   ];
 
   return (
-    <div className="max-w-3xl mx-auto flex flex-col items-center min-h-screen px-4 sm:px-6 py-6 text-gray-800 bg-white/10 backdrop-blur-sm rounded-xl shadow-sm border border-gray-200">
+    <div className="max-w-3xl mx-auto flex flex-col items-center  px-4 sm:px-6 py-6 text-gray-800 bg-white/10 backdrop-blur-sm rounded-xl shadow-sm border border-gray-200">
       <div className="w-full">
         {/* Back Button */}
         <Link

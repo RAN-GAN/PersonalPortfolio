@@ -1,4 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import {
+  motion,
+  useScroll,
+  useMotionValueEvent,
+  AnimatePresence,
+} from "framer-motion";
 import ProfileImage from "./ProfileImage";
 import Header from "./Header";
 import LinkGrid from "./LinkGrid";
@@ -49,29 +55,92 @@ const PERSONAL_DATA = {
 
 function Home() {
   const [showLongContent, setShowLongContent] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);
+  const { scrollY } = useScroll();
+
+  useEffect(() => {
+    const checkDesktop = () => setIsDesktop(window.innerWidth >= 1280);
+    checkDesktop();
+    window.addEventListener("resize", checkDesktop);
+    return () => window.removeEventListener("resize", checkDesktop);
+  }, []);
+
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    if (latest > 200 && !isScrolled) {
+      setIsScrolled(true);
+    } else if (latest <= 200 && isScrolled) {
+      setIsScrolled(false);
+    }
+  });
+
+  const shouldFloat = isScrolled && isDesktop;
 
   const handleContentToggle = (view) => {
     setShowLongContent(view === "long");
   };
 
   return (
-    <main className="max-w-2xl mx-auto min-h-screen px-4 sm:px-6 pt-6 sm:pt-12 pb-16 flex flex-col items-center gap-6 sm:gap-8 font-medium">
-      <div className="flex flex-col items-center gap-4 sm:gap-6 text-center mt-4 sm:mt-0">
+    <div className="relative w-full">
+      {/* Left Sidebar Fixed (Profile, Header) - ALWAYS MOUNTED, ONLY FADES */}
+      <motion.div
+        animate={{ opacity: shouldFloat ? 1 : 0, x: shouldFloat ? 0 : -10 }}
+        transition={{ duration: 0.3 }}
+        className={`hidden xl:flex fixed left-8 2xl:left-12 top-[10vh] flex-col items-start gap-4 z-40 w-64 origin-left ${
+          shouldFloat ? "pointer-events-auto" : "pointer-events-none"
+        }`}
+      >
         <ProfileImage src={PROFILE_IMAGE_SRC} alt={PERSONAL_DATA.name} />
-        <Header name={PERSONAL_DATA.name} tagline={PERSONAL_DATA.tagline} />
-      </div>
+        <div className="text-left w-full">
+          <Header name={PERSONAL_DATA.name} tagline={PERSONAL_DATA.tagline} />
+        </div>
+      </motion.div>
 
-      <LinkGrid links={PERSONAL_DATA.links} />
+      {/* Right Sidebar Fixed (Now Playing, Links) - ALWAYS MOUNTED, ONLY FADES */}
+      <motion.div
+        animate={{ opacity: shouldFloat ? 1 : 0, x: shouldFloat ? 0 : 10 }}
+        transition={{ duration: 0.3 }}
+        className={`hidden xl:flex fixed right-8 2xl:right-12 top-[15vh] z-40 w-[350px] flex-col items-center gap-6 origin-right ${
+          shouldFloat ? "pointer-events-auto" : "pointer-events-none"
+        }`}
+      >
+        <div className="w-full">
+          <NowPlaying />
+        </div>
+        <div className="scale-95 origin-top w-full flex justify-center">
+          <LinkGrid links={PERSONAL_DATA.links} />
+        </div>
+      </motion.div>
 
-      <NowPlaying />
+      <main className="max-w-2xl mx-auto min-h-screen px-4 sm:px-6 pt-6 sm:pt-12 pb-16 flex flex-col items-center gap-6 sm:gap-8 font-medium">
+        {/* Center Layout - Fades out but perfectly retains its natural flow structure */}
+        <motion.div
+          animate={{ opacity: shouldFloat ? 0 : 1, y: shouldFloat ? -10 : 0 }}
+          transition={{ duration: 0.3 }}
+          className={`flex flex-col items-center w-full gap-6 sm:gap-8 ${
+            !shouldFloat ? "pointer-events-auto" : "pointer-events-none"
+          }`}
+        >
+          <div className="flex flex-col items-center gap-4 sm:gap-6 text-center mt-4 sm:mt-0 w-full">
+            <ProfileImage src={PROFILE_IMAGE_SRC} alt={PERSONAL_DATA.name} />
+            <Header name={PERSONAL_DATA.name} tagline={PERSONAL_DATA.tagline} />
+          </div>
 
-      <ContentToggle onToggle={handleContentToggle} />
+          <LinkGrid links={PERSONAL_DATA.links} />
 
-      <AboutSection
-        content={PERSONAL_DATA.content}
-        showLong={showLongContent}
-      />
-    </main>
+          <div className="w-full flex justify-center">
+            <NowPlaying />
+          </div>
+        </motion.div>
+
+        <ContentToggle onToggle={handleContentToggle} />
+
+        <AboutSection
+          content={PERSONAL_DATA.content}
+          showLong={showLongContent}
+        />
+      </main>
+    </div>
   );
 }
 

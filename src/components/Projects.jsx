@@ -4,46 +4,51 @@ import { Link } from "react-router-dom";
 export default function Projects() {
   const achievements = [
     {
-      text: "Automated semester result workflows by developing a service that automatically sends results as soon as they are published staright to mail.",
+      text: "Built a system that automatically detects result releases and instantly sends them to users via email.",
       link: "#",
       color: "yellow",
-      label: "",
+      label: "Automated Result Notifications",
     },
     {
-      text: "Collaborated with a professional team to perform large-scale",
+      text: "Worked with a professional team to simulate high traffic and uncover performance bottlenecks in college systems.",
       link: "https://www.linkedin.com/in/pradeepchandranm/",
       color: "green",
-      label: "Network Load Testing for my college",
+      label: "Infrastructure Load Testing",
     },
     {
-      text: "Discovered and responsibly disclosed vulnerabilities in an",
+      text: "Discovered and responsibly disclosed security flaws including access control and privilege escalation issues.",
       link: "https://www.linkedin.com/in/pradeepchandranm/",
       color: "pink",
-      label: "EdTech Platform",
+      label: "Security Research",
     },
   ];
 
   const projects = [
     {
+      title: "Automated Result Notifier",
+      link: "#",
+      color: "pink",
+      desc: "Monitors result portals in real-time and instantly notifies users when results are published.",
+    },
+    {
+      title: "Code Sync",
+      link: "#",
+      color: "green",
+      desc: "Aggregates coding activity from multiple platforms into a single dashboard for unified tracking.",
+    },
+    {
+      title: "Morphide",
+      link: "#",
+      color: "yellow",
+      desc: "An IoT IDE with device fingerprinting and firmware inspection for smarter embedded development.",
+    },
+    {
       title: "SGPA Calculator",
       link: "https://ran-gan.github.io/SKCET-CGPA/",
       color: "pink",
-      desc: "A student-friendly GPA calculator that helps compute semester grades instantly through a clean and minimal interface.",
-    },
-    {
-      title: "Guest Management System",
-      link: "#",
-      color: "green",
-      desc: "A hotel administration tool to manage guest check-ins, bookings, and records efficiently with role-based access control.",
-    },
-    {
-      title: "Hotel Landing Page",
-      link: "karpagamresidency.vercel.app",
-      color: "yellow",
-      desc: "A responsive website for a hotel that highlights amenities, nearby attractions, and contact details with a modern design.",
+      desc: "A fast, minimal GPA calculator used for thousands of computations with top search ranking.",
     },
   ];
-
   const underlineStyle = {
     pink: "underline decoration-pink-500 decoration-2 underline-offset-2 hover:text-pink-400",
     yellow:
@@ -54,7 +59,7 @@ export default function Projects() {
 
   return (
     <div
-      className="max-w-2xl mx-auto flex flex-col items-center min-h-screen px-4 sm:px-6 py-6 
+      className="max-w-2xl mx-auto flex flex-col items-center  px-4 sm:px-6 py-6 
 text-gray-800 bg-white/10 backdrop-blur-sm rounded-xl shadow-sm border border-gray-200"
     >
       <div className="w-full">
