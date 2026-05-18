@@ -1,72 +1,220 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
+const stats = [
+  { value: '5+',     label: 'Projects delivered',  sub: 'and counting' },
+  { value: '3 days', label: 'Fastest turnaround',  sub: 'from brief to live' },
+  { value: '100%',   label: 'Remote-capable',       sub: 'anywhere, anytime' },
+];
+
+const process = [
+  { num: '01', title: 'Brief & Scope',    desc: 'We align on goals, timeline, and budget in a single call.' },
+  { num: '02', title: 'Design & Build',   desc: 'I design in the browser — you see real progress, not mockups.' },
+  { num: '03', title: 'Review & Refine',  desc: 'Two rounds of feedback, then we lock it down.' },
+  { num: '04', title: 'Ship & Hand Off',  desc: 'Live deployment, full ownership transfer, and a clean handoff.' },
+];
+
+const ease = [0.16, 1, 0.3, 1];
+
+const scrollTo = (id) => (e) => {
+  e.preventDefault();
+  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+};
+
 const WhyChooseMe = () => {
-  const reasons = [
-    "Fast delivery",
-    "Clean and scalable code",
-    "Modern UI/UX",
-    "Reliable deployment",
-    "Focus on practical business solutions"
-  ];
-
   return (
-    <section className="px-6 sm:px-12 md:px-24 py-12">
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-12 md:gap-24">
-        <motion.div 
-          initial={{ opacity: 0, x: -30 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          className="md:w-1/2"
-        >
-          <span className="text-xs uppercase tracking-[0.2em] text-[#a1a1aa] font-medium">Why Choose Me</span>
-          <h2 className="text-3xl md:text-5xl font-light mt-4 tracking-tight leading-tight mb-8">
-            Built for <span className="font-semibold text-white">Excellence.</span>
-          </h2>
-          <p className="text-[#a1a1aa] text-sm leading-relaxed max-w-sm font-light mb-8">
-            I don't just write code. I partner with you to build digital assets that actively grow your business, enhance your brand, and streamline your operations securely.
-          </p>
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center overflow-hidden bg-white/5">
-              <span className="text-xs font-semibold text-white">PR</span>
-            </div>
-            <div>
-              <div className="text-sm font-medium text-white">Pradeep Chandran M</div>
-              <div className="text-xs text-[#a1a1aa]">Freelance Web Developer</div>
-            </div>
-          </div>
-        </motion.div>
+    <section style={{
+      backgroundColor: '#111110',
+      position: 'relative',
+      overflow: 'hidden',
+    }}>
+      {/* Background geometry */}
+      <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none' }} aria-hidden="true">
+        <circle cx="100%" cy="50%" r="400" fill="none" stroke="rgba(247,243,236,0.03)" strokeWidth="1" />
+        <circle cx="100%" cy="50%" r="260" fill="none" stroke="rgba(199,91,33,0.05)" strokeWidth="1" />
+        <line x1="0" y1="0" x2="100%" y2="100%" stroke="rgba(247,243,236,0.02)" strokeWidth="1" />
+      </svg>
 
-        <motion.div 
-          initial={{ opacity: 0, x: 30 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          className="md:w-1/2 w-full bg-[#121214] rounded-3xl border border-white/5 p-8 sm:p-12 relative overflow-hidden"
-        >
-          <div className="absolute top-0 right-0 w-64 h-64 bg-[#B19EEF] opacity-[0.03] blur-[80px] rounded-full pointer-events-none"></div>
-          
-          <ul className="space-y-6 relative z-10">
-            {reasons.map((reason, index) => (
-              <motion.li 
-                key={index}
-                initial={{ opacity: 0, y: 10 }}
+      {/* Quote block */}
+      <div style={{ padding: 'clamp(80px,12vw,140px) clamp(24px,6vw,72px) clamp(60px,8vw,80px)', position: 'relative', zIndex: 1 }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+          <motion.div
+            initial={{ opacity: 0, y: 36 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 0.95, ease }}
+            style={{
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr',
+              gap: 'clamp(40px,6vw,80px)',
+              alignItems: 'end',
+              marginBottom: '80px',
+            }}
+          >
+            <blockquote style={{
+              fontFamily: "'Fraunces', serif",
+              fontStyle: 'italic',
+              fontWeight: 400,
+              fontSize: 'clamp(32px, 5.5vw, 80px)',
+              color: '#F7F3EC',
+              lineHeight: 1.1,
+              letterSpacing: '-0.03em',
+              margin: 0,
+              paddingLeft: 'clamp(16px, 3vw, 40px)',
+              borderLeft: '3px solid #C75B21',
+            }}>
+              "I don't ship<br />
+              templates.<br />
+              <span style={{ color: '#C75B21' }}>I build tools.</span>"
+            </blockquote>
+
+            <div>
+              <p style={{
+                fontSize: '16px',
+                color: '#8B7D6B',
+                fontFamily: "'DM Sans', sans-serif",
+                fontWeight: 400,
+                lineHeight: 1.8,
+                margin: '0 0 28px',
+              }}>
+                Every project gets my full attention from day one. No hand-offs to junior devs, no cookie-cutter templates — just direct collaboration and clean, purposeful code.
+              </p>
+              <a href="#contact" onClick={scrollTo('contact')} style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                fontSize: '11px',
+                letterSpacing: '0.14em',
+                textTransform: 'uppercase',
+                color: '#C75B21',
+                fontFamily: "'DM Mono', monospace",
+                textDecoration: 'none',
+                borderBottom: '1px solid rgba(199,91,33,0.35)',
+                paddingBottom: '3px',
+              }}>
+                Start a project →
+              </a>
+            </div>
+          </motion.div>
+
+          {/* Stats */}
+          <div className="fl2-stats-grid" style={{ marginBottom: '80px' }}>
+            {stats.map((stat, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 16 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className="flex items-center gap-4 group"
+                transition={{ duration: 0.6, delay: i * 0.1, ease }}
+                style={{
+                  padding: 'clamp(28px,4vw,48px)',
+                  borderTop: '1px solid rgba(247,243,236,0.08)',
+                  borderLeft: i > 0 ? '1px solid rgba(247,243,236,0.08)' : 'none',
+                }}
               >
-                <div className="w-6 h-6 rounded-full bg-[#B19EEF]/10 border border-[#B19EEF]/20 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-300">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="text-[#B19EEF]">
-                    <polyline points="20 6 9 17 4 12"></polyline>
-                  </svg>
+                <div style={{
+                  fontFamily: "'Fraunces', serif",
+                  fontStyle: 'italic',
+                  fontSize: 'clamp(40px, 6vw, 80px)',
+                  fontWeight: 700,
+                  color: '#F7F3EC',
+                  letterSpacing: '-0.03em',
+                  lineHeight: 1,
+                  marginBottom: '8px',
+                }}>
+                  {stat.value}
                 </div>
-                <span className="text-white text-base sm:text-lg font-light tracking-wide">{reason}</span>
-              </motion.li>
+                <div style={{
+                  fontSize: '11px',
+                  color: '#8B7D6B',
+                  letterSpacing: '0.15em',
+                  textTransform: 'uppercase',
+                  fontFamily: "'DM Mono', monospace",
+                  marginBottom: '4px',
+                }}>
+                  {stat.label}
+                </div>
+                <div style={{
+                  fontSize: '12px',
+                  color: 'rgba(247,243,236,0.2)',
+                  fontFamily: "'DM Mono', monospace",
+                  letterSpacing: '0.06em',
+                }}>
+                  {stat.sub}
+                </div>
+              </motion.div>
             ))}
-          </ul>
-        </motion.div>
+          </div>
+
+          {/* Process */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, ease }}
+            style={{ marginBottom: '40px' }}
+          >
+            <span style={{
+              fontSize: '10px',
+              letterSpacing: '0.2em',
+              color: '#8B7D6B',
+              textTransform: 'uppercase',
+              fontFamily: "'DM Mono', monospace",
+              display: 'block',
+              marginBottom: '32px',
+            }}>
+              How it works
+            </span>
+
+            <div className="fl2-process-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '2px' }}>
+              {process.map((step, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: i * 0.08, ease }}
+                  style={{
+                    backgroundColor: '#1A1816',
+                    padding: '32px 28px',
+                  }}
+                >
+                  <div style={{
+                    fontFamily: "'DM Mono', monospace",
+                    fontSize: '10px',
+                    color: '#C75B21',
+                    letterSpacing: '0.15em',
+                    marginBottom: '20px',
+                  }}>
+                    {step.num}
+                  </div>
+                  <div style={{
+                    fontFamily: "'Fraunces', serif",
+                    fontSize: '18px',
+                    fontWeight: 600,
+                    color: '#F7F3EC',
+                    letterSpacing: '-0.01em',
+                    marginBottom: '12px',
+                    lineHeight: 1.2,
+                  }}>
+                    {step.title}
+                  </div>
+                  <div style={{
+                    fontSize: '13px',
+                    color: '#8B7D6B',
+                    fontFamily: "'DM Sans', sans-serif",
+                    lineHeight: 1.7,
+                  }}>
+                    {step.desc}
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        </div>
       </div>
     </section>
   );
 };
+
 export default WhyChooseMe;

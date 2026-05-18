@@ -1,87 +1,245 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 
 const services = [
   {
-    title: "Business Website Development",
-    desc: "Responsive, fast, clean design engineered to impress visitors and convert.",
-    icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-[#a1a1aa] mb-5 group-hover:text-white transition-colors">
-        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-        <line x1="8" y1="21" x2="16" y2="21"></line>
-        <line x1="12" y1="17" x2="12" y2="21"></line>
-      </svg>
-    ),
-    span: "md:col-span-2",
+    num: '01',
+    title: 'Website & Web App Development',
+    desc: 'From marketing sites to full-stack web apps — responsive, fast, and built to scale. Landing page or custom internal tool, I build it right the first time.',
+    tags: ['React', 'Next.js', 'Node.js'],
   },
   {
-    title: "Web Application Development",
-    desc: "Custom dashboards, tools, and internal systems built with scalable infrastructure.",
-    icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-[#a1a1aa] mb-5 group-hover:text-white transition-colors">
-        <polyline points="16 18 22 12 16 6"></polyline>
-        <polyline points="8 6 2 12 8 18"></polyline>
-      </svg>
-    ),
-    span: "md:col-span-1",
+    num: '02',
+    title: 'Mobile App Development',
+    desc: 'Cross-platform apps built with React Native. One codebase, two platforms — iOS and Android — with a native feel that doesn\'t cut corners.',
+    tags: ['React Native', 'iOS', 'Android'],
   },
   {
-    title: "Website Redesign",
-    desc: "Implementing modern UI/UX principles and performance enhancements into existing sites.",
-    icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-[#a1a1aa] mb-5 group-hover:text-white transition-colors">
-        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-        <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
-        <line x1="12" y1="22.08" x2="12" y2="12"></line>
-      </svg>
-    ),
-    span: "md:col-span-1",
+    num: '03',
+    title: 'API Development & Integration',
+    desc: 'Custom REST APIs and third-party connections — payments, maps, CRMs. Backend logic that powers your product reliably behind the scenes.',
+    tags: ['REST', 'Node.js', 'Webhooks'],
   },
   {
-    title: "Cloud Deployment & Migration",
-    desc: "Robust app deployment, cloud hosting setups, and scalable solutions for web workloads.",
-    icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-[#a1a1aa] mb-5 group-hover:text-white transition-colors">
-        <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path>
-      </svg>
-    ),
-    span: "md:col-span-2",
-  }
+    num: '04',
+    title: 'Bot & Automation',
+    desc: 'Telegram bots, WhatsApp assistants, scheduled scripts and workflow automation that eliminate repetitive work and run quietly in the background.',
+    tags: ['Telegram', 'Python', 'Automation'],
+  },
+  {
+    num: '05',
+    title: 'Website Redesign',
+    desc: 'Outdated look, slow load times, poor conversions? I modernize existing sites with sharp UI/UX and performance tuning — without starting from scratch.',
+    tags: ['UI/UX', 'Performance', 'SEO'],
+  },
+  {
+    num: '06',
+    title: 'Cloud Deployment & Migration',
+    desc: 'From local to live — CI/CD pipelines, VPS setup, domain config, and cloud infrastructure built for reliability so your app stays up when it matters.',
+    tags: ['AWS', 'VPS', 'CI/CD'],
+  },
 ];
 
+const ease = [0.16, 1, 0.3, 1];
+
 const BentoServices = () => {
+  const [hoveredIdx, setHoveredIdx] = useState(null);
+
   return (
-    <section className="px-6 sm:px-12 md:px-24">
-      <div className="max-w-7xl mx-auto">
-        <motion.div 
+    <section id="services" style={{
+      backgroundColor: '#F7F3EC',
+      padding: 'clamp(80px, 12vw, 140px) clamp(24px, 6vw, 72px)',
+      position: 'relative',
+      overflow: 'hidden',
+    }}>
+      {/* Background geometry */}
+      <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none' }} aria-hidden="true">
+        <circle cx="50%" cy="-12%" r="380" fill="none" stroke="rgba(26,24,22,0.06)" strokeWidth="1" />
+        <line x1="50%" y1="0" x2="50%" y2="100%" stroke="rgba(26,24,22,0.04)" strokeWidth="1" />
+        {Array.from({ length: 4 }, (_, row) =>
+          Array.from({ length: 5 }, (_, col) => (
+            <circle key={`${row}-${col}`} cx={`${4 + col * 5}%`} cy={`${20 + row * 20}%`} r="1.3" fill="rgba(26,24,22,0.1)" />
+          ))
+        )}
+        <circle cx="96%" cy="88%" r="180" fill="none" stroke="rgba(199,91,33,0.08)" strokeWidth="1" />
+      </svg>
+      <div style={{ maxWidth: '1200px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
+
+        {/* Header */}
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          className="mb-12"
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, ease }}
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'flex-end',
+            marginBottom: '56px',
+          }}
         >
-          <span className="text-xs uppercase tracking-[0.2em] text-[#a1a1aa] font-medium">Services</span>
-          <h2 className="text-3xl md:text-5xl font-light mt-4 tracking-tight">Specialized <span className="font-semibold text-white">Offerings.</span></h2>
+          <div>
+            <span style={{
+              fontSize: '10px',
+              letterSpacing: '0.2em',
+              color: '#8B7D6B',
+              textTransform: 'uppercase',
+              display: 'block',
+              marginBottom: '10px',
+              fontFamily: "'DM Mono', monospace",
+            }}>
+              What I Do
+            </span>
+            <h2 style={{
+              fontFamily: "'Fraunces', serif",
+              fontSize: 'clamp(32px, 5vw, 64px)',
+              fontWeight: 700,
+              letterSpacing: '-0.02em',
+              color: '#1A1816',
+              margin: 0,
+            }}>
+              Specialized offerings.
+            </h2>
+          </div>
+          <span style={{
+            fontSize: '10px',
+            letterSpacing: '0.15em',
+            color: '#8B7D6B',
+            textTransform: 'uppercase',
+            fontFamily: "'DM Mono', monospace",
+          }}>
+            6 services
+          </span>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 auto-rows-[250px]">
-          {services.map((svc, index) => (
-            <motion.div 
-              key={index}
-              initial={{ opacity: 0, scale: 0.98 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
-              className={`${svc.span} bg-[#121214] rounded-2xl border border-white/5 p-8 flex flex-col justify-end relative overflow-hidden group hover:border-white/20 transition-all duration-500 hover:-translate-y-1 shadow-[0_0_0_rgba(255,255,255,0)] hover:shadow-[0_10px_40px_rgba(255,255,255,0.03)]`}
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-              {svc.icon}
-              <h3 className="text-xl font-medium text-white mb-2 relative z-10">{svc.title}</h3>
-              <p className="text-[#a1a1aa] text-sm max-w-md font-light relative z-10">{svc.desc}</p>
-            </motion.div>
-          ))}
+        {/* Grid */}
+        <div className="fl2-services-grid">
+          {services.map((svc, i) => {
+            const isHovered = hoveredIdx === i;
+            return (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-40px' }}
+                transition={{ duration: 0.55, delay: i * 0.06, ease }}
+                onMouseEnter={() => setHoveredIdx(i)}
+                onMouseLeave={() => setHoveredIdx(null)}
+                style={{
+                  backgroundColor: isHovered ? '#1A1816' : '#F7F3EC',
+                  border: `1px solid ${isHovered ? 'transparent' : 'rgba(26,24,22,0.1)'}`,
+                  padding: 'clamp(28px, 4vw, 44px)',
+                  position: 'relative',
+                  overflow: 'hidden',
+                  transition: 'background-color 0.4s ease, border-color 0.4s ease',
+                  minHeight: '320px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  cursor: 'default',
+                }}
+              >
+                {/* Top row: number + arrow */}
+                <div style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'flex-start',
+                }}>
+                  <span style={{
+                    fontFamily: "'DM Mono', monospace",
+                    fontSize: '11px',
+                    color: isHovered ? '#C75B21' : '#8B7D6B',
+                    letterSpacing: '0.1em',
+                    transition: 'color 0.4s',
+                  }}>
+                    {svc.num}
+                  </span>
+                  <span style={{
+                    fontSize: '18px',
+                    color: isHovered ? '#C75B21' : 'rgba(26,24,22,0.15)',
+                    transition: 'color 0.4s, transform 0.4s',
+                    transform: isHovered ? 'translate(3px, -3px)' : 'translate(0,0)',
+                    display: 'inline-block',
+                  }}>
+                    ↗
+                  </span>
+                </div>
+
+                {/* Large ghost number */}
+                <div style={{
+                  position: 'absolute',
+                  bottom: '-10px',
+                  right: '16px',
+                  fontFamily: "'Fraunces', serif",
+                  fontSize: 'clamp(80px, 10vw, 130px)',
+                  fontWeight: 900,
+                  lineHeight: 1,
+                  letterSpacing: '-0.05em',
+                  userSelect: 'none',
+                  pointerEvents: 'none',
+                  transition: 'color 0.4s',
+                  color: isHovered
+                    ? 'rgba(199, 91, 33, 0.12)'
+                    : 'rgba(26, 24, 22, 0.04)',
+                }}>
+                  {svc.num}
+                </div>
+
+                {/* Bottom: title + desc + tags */}
+                <div style={{ position: 'relative', zIndex: 1 }}>
+                  <h3 style={{
+                    fontFamily: "'Fraunces', serif",
+                    fontSize: 'clamp(20px, 2.6vw, 28px)',
+                    fontWeight: isHovered ? 700 : 600,
+                    fontStyle: isHovered ? 'italic' : 'normal',
+                    color: isHovered ? '#F7F3EC' : '#1A1816',
+                    margin: '0 0 14px',
+                    letterSpacing: '-0.01em',
+                    lineHeight: 1.2,
+                    transition: 'color 0.4s',
+                  }}>
+                    {svc.title}
+                  </h3>
+                  <p style={{
+                    fontSize: '15px',
+                    color: isHovered ? 'rgba(247,243,236,0.7)' : '#4A3F38',
+                    lineHeight: 1.75,
+                    margin: '0 0 22px',
+                    fontFamily: "'DM Sans', sans-serif",
+                    fontWeight: 400,
+                    transition: 'color 0.4s',
+                  }}>
+                    {svc.desc}
+                  </p>
+
+                  {/* Tech tags */}
+                  <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                    {svc.tags.map(tag => (
+                      <span key={tag} style={{
+                        fontSize: '11px',
+                        letterSpacing: '0.08em',
+                        textTransform: 'uppercase',
+                        fontFamily: "'DM Mono', monospace",
+                        padding: '4px 10px',
+                        borderRadius: '100px',
+                        border: `1px solid ${isHovered
+                          ? 'rgba(199,91,33,0.4)'
+                          : 'rgba(26,24,22,0.15)'}`,
+                        color: isHovered ? '#C75B21' : '#8B7D6B',
+                        transition: 'color 0.4s, border-color 0.4s',
+                      }}>
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </section>
   );
 };
+
 export default BentoServices;

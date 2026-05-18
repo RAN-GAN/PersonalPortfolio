@@ -67,7 +67,6 @@ function titleToGradient(title) {
     return Math.abs(hash);
   }
 
-  // ✅ Logic is now directly in the outer function
   if (!title || title === "Not playing") {
     return "linear-gradient(135deg, #1a1a24, #252530)";
   }

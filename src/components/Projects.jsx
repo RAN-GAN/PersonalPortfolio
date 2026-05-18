@@ -5,7 +5,7 @@ export default function Projects() {
   const achievements = [
     {
       text: "Built a system that automatically detects result releases and instantly sends them to users via email.",
-      link: "#",
+      link: null,
       color: "yellow",
       label: "Automated Result Notifications",
     },
@@ -26,19 +26,19 @@ export default function Projects() {
   const projects = [
     {
       title: "Automated Result Notifier",
-      link: "#",
+      link: null,
       color: "pink",
       desc: "Monitors result portals in real-time and instantly notifies users when results are published.",
     },
     {
       title: "Code Sync",
-      link: "#",
+      link: null,
       color: "green",
       desc: "Aggregates coding activity from multiple platforms into a single dashboard for unified tracking.",
     },
     {
       title: "Morphide",
-      link: "#",
+      link: null,
       color: "yellow",
       desc: "An IoT IDE with device fingerprinting and firmware inspection for smarter embedded development.",
     },
@@ -99,23 +99,27 @@ text-gray-800 bg-white/10 backdrop-blur-sm rounded-xl shadow-sm border border-gr
           <h2 className="text-xl font-medium mb-2">Achievements</h2>
           <ul className="space-y-1.5">
             {achievements.map((a, idx) => (
-              <>
-                <li key={idx} className="flex text-base">
+              <React.Fragment key={idx}>
+                <li className="flex text-base">
                   <span className="mr-2 text-gray-400">–</span>
                   <div>
                     {a.text}{" "}
-                    <a
-                      href={a.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={`${underlineStyle[a.color]}`}
-                    >
-                      {a.label}
-                    </a>
+                    {a.link ? (
+                      <a
+                        href={a.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={`${underlineStyle[a.color]}`}
+                      >
+                        {a.label}
+                      </a>
+                    ) : (
+                      <span className={`${underlineStyle[a.color]}`}>{a.label}</span>
+                    )}
                   </div>
                 </li>
                 <br />
-              </>
+              </React.Fragment>
             ))}
           </ul>
         </section>
@@ -124,24 +128,27 @@ text-gray-800 bg-white/10 backdrop-blur-sm rounded-xl shadow-sm border border-gr
           <h2 className="text-xl font-medium mb-2">Projects</h2>
           <ul className="space-y-1.5">
             {projects.map((p, idx) => (
-              <>
-                {" "}
-                <li key={idx} className="flex text-base">
+              <React.Fragment key={idx}>
+                <li className="flex text-base">
                   <span className="mr-2 text-gray-400">–</span>
                   <div>
-                    <a
-                      href={p.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={`${underlineStyle[p.color]}`}
-                    >
-                      {p.title}
-                    </a>
+                    {p.link ? (
+                      <a
+                        href={p.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={`${underlineStyle[p.color]}`}
+                      >
+                        {p.title}
+                      </a>
+                    ) : (
+                      <span className={`${underlineStyle[p.color]}`}>{p.title}</span>
+                    )}
                     : {p.desc}
                   </div>
                 </li>
                 <br />
-              </>
+              </React.Fragment>
             ))}
           </ul>
         </section>

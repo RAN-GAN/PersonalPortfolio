@@ -19,7 +19,7 @@ const PERSONAL_DATA = {
   name: "Pradeep Chandran M",
   tagline: "Driven by Curiosity | Learning by Breaking and Building",
   links: [
-    { text: "email", color: "rgb(16, 162, 245)" },
+    { text: "email", href: "mailto:pradeepchandranm@gmail.com", color: "rgb(16, 162, 245)" },
     {
       text: "github",
       href: "https://github.com/RAN-GAN",
@@ -54,7 +54,6 @@ const PERSONAL_DATA = {
 };
 
 function Home() {
-  const [showLongContent, setShowLongContent] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
   const { scrollY } = useScroll();
@@ -75,10 +74,6 @@ function Home() {
   });
 
   const shouldFloat = isScrolled && isDesktop;
-
-  const handleContentToggle = (view) => {
-    setShowLongContent(view === "long");
-  };
 
   return (
     <div className="relative w-full">
@@ -133,12 +128,9 @@ function Home() {
           </div>
         </motion.div>
 
-        <ContentToggle onToggle={handleContentToggle} />
+        <ContentToggle />
 
-        <AboutSection
-          content={PERSONAL_DATA.content}
-          showLong={showLongContent}
-        />
+        <AboutSection content={PERSONAL_DATA.content} />
       </main>
     </div>
   );
