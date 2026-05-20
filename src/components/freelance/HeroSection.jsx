@@ -59,7 +59,7 @@ const HeroSection = () => {
     <section style={{
       minHeight: '100vh',
       backgroundColor: '#F7F3EC',
-      padding: 'clamp(100px, 14vh, 160px) clamp(24px, 6vw, 72px) clamp(60px, 8vh, 80px)',
+      padding: 'clamp(72px, 10vh, 160px) clamp(24px, 6vw, 72px) clamp(40px, 6vh, 80px)',
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'center',
@@ -122,12 +122,12 @@ const HeroSection = () => {
               transition={{ duration: 0.7, delay: 0.2, ease }}
               style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', marginBottom: '32px' }}
             >
-              <span style={{
+              {/* <span style={{
                 width: '7px', height: '7px', borderRadius: '50%',
                 backgroundColor: '#22c55e',
                 display: 'inline-block',
                 animation: 'fl2-pulse-green 2s ease-in-out infinite',
-              }} />
+              }} /> */}
               <span style={{
                 fontSize: '11px',
                 letterSpacing: '0.18em',
@@ -154,7 +154,7 @@ const HeroSection = () => {
                 margin: '0 0 28px',
                 color: '#1A1816',
               }}>
-                <span style={{ display: 'block' }}>Web</span>
+                <span style={{ display: 'block' }}>Software</span>
                 <span style={{ display: 'block', color: '#C75B21' }}>Development</span>
                 <span style={{ display: 'block' }}>that works.</span>
               </h1>

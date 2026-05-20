@@ -7,6 +7,7 @@ import WhyChooseMe from '../components/freelance/WhyChooseMe';
 import PricingTiers from '../components/freelance/PricingTiers';
 import FooterCTA from '../components/freelance/FooterCTA';
 import MarqueeTicker from '../components/freelance/MarqueeTicker';
+import FlowArt, { FlowSection } from '../components/ui/story-scroll';
 
 const FreelancePortfolio = () => {
   useEffect(() => {
@@ -32,7 +33,7 @@ const FreelancePortfolio = () => {
         top: 0,
         left: 0,
         right: 0,
-        zIndex: 100,
+        zIndex: 1000,
         padding: '18px clamp(24px, 6vw, 72px)',
         display: 'flex',
         justifyContent: 'space-between',
@@ -69,19 +70,35 @@ const FreelancePortfolio = () => {
         </div>
       </nav>
 
-      <main>
-        <HeroSection />
-        <MarqueeTicker />
-        <SelectedWork />
-        <MarqueeTicker dark />
-        <BentoServices />
-        <MarqueeTicker dark />
+      <FlowArt aria-label="Freelance Portfolio">
+        <FlowSection bare aria-label="Hero" style={{ backgroundColor: '#F7F3EC' }}>
+          <HeroSection />
+          <MarqueeTicker />
+        </FlowSection>
 
-        <WhyChooseMe />
-        <MarqueeTicker />
-        <PricingTiers />
-        <FooterCTA />
-      </main>
+        <FlowSection bare aria-label="Selected Work" style={{ backgroundColor: '#111110' }}>
+          <SelectedWork />
+          <MarqueeTicker dark />
+        </FlowSection>
+
+        <FlowSection bare aria-label="Services" style={{ backgroundColor: '#F7F3EC' }}>
+          <BentoServices />
+          <MarqueeTicker dark />
+        </FlowSection>
+
+        <FlowSection bare aria-label="Why Choose Me" style={{ backgroundColor: '#111110' }}>
+          <WhyChooseMe />
+          <MarqueeTicker />
+        </FlowSection>
+
+        <FlowSection bare aria-label="Pricing" style={{ backgroundColor: '#F7F3EC' }}>
+          <PricingTiers />
+        </FlowSection>
+
+        <FlowSection bare aria-label="Contact" style={{ backgroundColor: '#111110' }}>
+          <FooterCTA />
+        </FlowSection>
+      </FlowArt>
     </div>
   );
 };

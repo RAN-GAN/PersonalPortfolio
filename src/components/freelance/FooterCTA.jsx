@@ -7,10 +7,16 @@ const FooterCTA = () => {
   return (
     <section id="contact" style={{
       backgroundColor: '#111110',
-      padding: 'clamp(80px, 14vw, 160px) clamp(24px, 6vw, 72px) clamp(40px, 6vw, 64px)',
+      minHeight: '100vh',
+      boxSizing: 'border-box',
+      padding: 'clamp(60px, 12vw, 160px) clamp(20px, 6vw, 72px) clamp(28px, 4vw, 56px)',
       position: 'relative',
       overflow: 'hidden',
+      display: 'flex',
+      flexDirection: 'column',
+      gap: '40px',
     }}>
+
       {/* Background geometry */}
       <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none' }} aria-hidden="true">
         <circle cx="-5%" cy="110%" r="420" fill="none" stroke="rgba(247,243,236,0.04)" strokeWidth="1" />
@@ -22,7 +28,9 @@ const FooterCTA = () => {
           ))
         )}
       </svg>
-      <div style={{ maxWidth: '1200px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
+
+      {/* Main content — grows to fill available space and centers vertically */}
+      <div style={{ position: 'relative', zIndex: 1, maxWidth: '1200px', width: '100%', margin: '0 auto', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
 
         {/* Limited slots badge */}
         <motion.div
@@ -39,7 +47,7 @@ const FooterCTA = () => {
             textTransform: 'uppercase',
             color: '#8B7D6B',
             fontFamily: "'DM Mono', monospace",
-            marginBottom: '40px',
+            marginBottom: 'clamp(20px, 4vw, 40px)',
           }}
         >
           <span style={{
@@ -47,6 +55,7 @@ const FooterCTA = () => {
             height: '6px',
             borderRadius: '50%',
             backgroundColor: '#C75B21',
+            flexShrink: 0,
             display: 'inline-block',
             animation: 'fl2-pulse-amber 2.4s ease-in-out infinite',
           }} />
@@ -63,11 +72,11 @@ const FooterCTA = () => {
             fontFamily: "'Fraunces', serif",
             fontStyle: 'italic',
             fontWeight: 700,
-            fontSize: 'clamp(56px, 11.5vw, 168px)',
+            fontSize: 'clamp(44px, 11.5vw, 168px)',
             color: '#F7F3EC',
             lineHeight: 0.95,
             letterSpacing: '-0.04em',
-            margin: '0 0 64px',
+            margin: '0 0 clamp(32px, 5vw, 64px)',
           }}
         >
           Let's build<br />
@@ -81,19 +90,9 @@ const FooterCTA = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.7, delay: 0.15, ease }}
-          style={{
-            display: 'flex',
-            gap: '12px',
-            flexWrap: 'wrap',
-            marginBottom: '80px',
-          }}
+          className="fl2-footer-btns"
         >
-          <a
-            href="https://wa.me/916379160890"
-            target="_blank"
-            rel="noreferrer"
-            style={ctaBtn(true)}
-          >
+          <a href="https://wa.me/916379160890" target="_blank" rel="noreferrer" style={ctaBtn(true)}>
             WhatsApp →
           </a>
           <a href="mailto:pradeepchandranm@gmail.com" style={ctaBtn(false)}>
@@ -103,17 +102,11 @@ const FooterCTA = () => {
             Call →
           </a>
         </motion.div>
+      </div>
 
-        {/* Footer bar */}
-        <div style={{
-          borderTop: '1px solid rgba(247, 243, 236, 0.07)',
-          paddingTop: '32px',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          flexWrap: 'wrap',
-          gap: '16px',
-        }}>
+      {/* Footer bar — auto top margin pins it to the bottom */}
+      <div style={{ position: 'relative', zIndex: 1, maxWidth: '1200px', width: '100%', margin: '0 auto', marginTop: 'auto' }}>
+        <div className="fl2-footer-bar">
           <div style={{ display: 'flex', gap: '24px' }}>
             {[
               { label: 'GitHub', href: 'https://github.com/RAN-GAN' },
@@ -168,6 +161,7 @@ const ctaBtn = (primary) => ({
   fontWeight: 500,
   border: primary ? 'none' : '1px solid rgba(247, 243, 236, 0.18)',
   cursor: 'pointer',
+  whiteSpace: 'nowrap',
 });
 
 export default FooterCTA;
