@@ -50,7 +50,7 @@ const FooterCTA = () => {
             marginBottom: 'clamp(20px, 4vw, 40px)',
           }}
         >
-          <span style={{
+          {/* <span style={{
             width: '6px',
             height: '6px',
             borderRadius: '50%',
@@ -58,7 +58,7 @@ const FooterCTA = () => {
             flexShrink: 0,
             display: 'inline-block',
             animation: 'fl2-pulse-amber 2.4s ease-in-out infinite',
-          }} />
+          }} /> */}
           Limited slots this month
         </motion.div>
 
