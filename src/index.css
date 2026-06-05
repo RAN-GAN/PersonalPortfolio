@@ -1,12 +1,31 @@
 @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=DM+Mono:ital,wght@0,400;0,500;1,400&family=DM+Sans:ital,wght@0,300..600;1,300..600&display=swap');
 @import "tailwindcss";
 
+@theme {
+  --color-td-bg:       #fafaf9;
+  --color-td-surface:  #f5f4f0;
+  --color-td-border:   #d4cfc8;
+  --color-td-ink:      #0c0a09;
+  --color-td-muted:    #3a3530;
+  --color-td-amber:    #b45309;
+  --color-td-amber-lt: #fbbf24;
+  --color-td-sepia:    #a16207;
+
+  --font-display: "SAILORS", serif;
+  --font-body:    "Proxima Nova", system-ui, sans-serif;
+  --font-mono:    "DM Mono", ui-monospace, monospace;
+}
+
 /* Global Styles */
 html {
   background-color: #efefef;
   font-size: 100%;
-  scroll-snap-type: y mandatory;
   scroll-behavior: smooth;
+}
+
+/* Scope scroll-snap only to non-cinematic routes */
+html:not([data-cinematic]) {
+  scroll-snap-type: y mandatory;
 }
 
 @media (min-width: 1280px) {
@@ -20,10 +39,35 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Snap scroll containers */
-main {
+/* Snap scroll containers — only on non-cinematic routes */
+html:not([data-cinematic]) main {
   scroll-snap-align: start;
   scroll-snap-stop: always;
+}
+
+/* ── Cinematic Portfolio ── */
+.cinematic-page {
+  background-color: #fafaf9;
+  color: #1c1917;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+@keyframes grain {
+  0%,  100% { transform: translate(0,    0);    }
+  10%        { transform: translate(-2%,  -3%);  }
+  20%        { transform: translate(3%,   1%);   }
+  30%        { transform: translate(-1%,  3%);   }
+  40%        { transform: translate(2%,  -2%);   }
+  50%        { transform: translate(-3%,  1%);   }
+  60%        { transform: translate(1%,   2%);   }
+  70%        { transform: translate(2%,  -3%);   }
+  80%        { transform: translate(-1%,  2%);   }
+  90%        { transform: translate(-2%,  -1%);  }
+}
+
+.cinematic-grain {
+  animation: grain 0.18s steps(1) infinite;
 }
 
 /* Custom CSS Variables for dynamic colors */
@@ -154,6 +198,11 @@ main {
 @keyframes fl2-blink {
   0%, 100% { opacity: 1; }
   50%       { opacity: 0; }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0);    }
 }
 
 .fl2-hero-grid {
