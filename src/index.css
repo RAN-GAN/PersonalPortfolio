@@ -200,6 +200,11 @@ html:not([data-cinematic]) main {
   50%       { opacity: 0; }
 }
 
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
 .fl2-hero-grid {
   display: grid;
   grid-template-columns: 1.8fr 1fr;

@@ -81,57 +81,81 @@ export const ACHIEVEMENTS = [
 ];
 
 export const SKILLS = [
-  { id: "react", label: "React", group: "frontend", x: 200, y: 120 },
-  { id: "nextjs", label: "Next.js", group: "frontend", x: 350, y: 80 },
-  { id: "tailwind", label: "Tailwind", group: "frontend", x: 120, y: 240 },
+  // Frontend cluster — top left
+  { id: "js", label: "JavaScript", group: "frontend", x: 120, y: 185 },
+  { id: "react", label: "React", group: "frontend", x: 210, y: 118 },
+  { id: "nextjs", label: "Next.js", group: "frontend", x: 342, y: 68 },
+  { id: "tailwind", label: "Tailwind", group: "frontend", x: 108, y: 260 },
 
-  { id: "node", label: "Node.js", group: "backend", x: 500, y: 140 },
-  { id: "python", label: "Python", group: "backend", x: 620, y: 240 },
-  { id: "api", label: "REST APIs", group: "backend", x: 500, y: 300 },
+  // Backend cluster — center (Node.js is the top-center hub)
+  { id: "node", label: "Node.js", group: "backend", x: 490, y: 68 },
+  { id: "python", label: "Python", group: "backend", x: 612, y: 172 },
+  { id: "api", label: "REST APIs", group: "backend", x: 488, y: 235 },
 
-  { id: "postgres", label: "PostgreSQL", group: "database", x: 720, y: 140 },
-  { id: "mongodb", label: "MongoDB", group: "database", x: 820, y: 260 },
+  // Database cluster — right center
+  { id: "postgres", label: "PostgreSQL", group: "database", x: 718, y: 118 },
+  { id: "mongodb", label: "MongoDB", group: "database", x: 802, y: 228 },
 
-  { id: "aws", label: "AWS", group: "cloud", x: 900, y: 120 },
-  { id: "docker", label: "Docker", group: "cloud", x: 1000, y: 240 },
+  // Cloud cluster — top right
+  { id: "aws", label: "AWS", group: "cloud", x: 878, y: 88 },
+  { id: "docker", label: "Docker", group: "cloud", x: 948, y: 192 },
+  { id: "linux", label: "Linux", group: "cloud", x: 952, y: 305 },
 
-  { id: "burp", label: "Burp Suite", group: "security", x: 220, y: 420 },
-  { id: "osint", label: "OSINT", group: "security", x: 360, y: 500 },
-  { id: "bugbounty", label: "Bug Hunting", group: "security", x: 520, y: 460 },
+  // Security cluster — bottom left
+  { id: "burp", label: "Burp Suite", group: "security", x: 162, y: 342 },
+  { id: "osint", label: "OSINT", group: "security", x: 318, y: 380 },
+  { id: "bugbounty", label: "Bug Bounty", group: "security", x: 482, y: 362 },
 
-  { id: "llm", label: "LLMs", group: "ai", x: 760, y: 420 },
-  { id: "agents", label: "AI Agents", group: "ai", x: 920, y: 500 },
-
-  { id: "builder", label: "Product Builder", group: "core", x: 620, y: 40 },
+  // AI cluster — bottom right
+  { id: "llm", label: "LLMs", group: "ai", x: 758, y: 325 },
+  { id: "agents", label: "AI Agents", group: "ai", x: 892, y: 378 },
 ];
-export const SKILL_EDGES = [
-  ["builder", "react"],
-  ["builder", "python"],
-  ["builder", "aws"],
 
+export const SKILL_EDGES = [
+  // JS is the language of both frontend and Node.js backend
+  ["js", "react"],
+  ["js", "node"],
+
+  // React ecosystem
   ["react", "nextjs"],
   ["react", "tailwind"],
 
+  // Next.js is a Node.js framework
   ["nextjs", "node"],
+  ["nextjs", "tailwind"],
+
+  // Node.js builds REST APIs; REST APIs talk to both databases
   ["node", "api"],
+  ["node", "mongodb"],
+  ["node", "postgres"],
+
   ["api", "postgres"],
   ["api", "mongodb"],
 
+  // Python also builds APIs (Flask / FastAPI) and uses Postgres directly
   ["python", "api"],
-  ["python", "llm"],
+  ["python", "postgres"],
+  ["python", "mongodb"],
 
-  ["llm", "agents"],
-
+  // Postgres runs on AWS RDS; AWS hosts Docker containers
+  ["postgres", "aws"],
   ["aws", "docker"],
-  ["aws", "postgres"],
-  ["docker", "node"],
 
+  // Docker containerises Node.js apps and runs on Linux
+  ["docker", "node"],
+  ["docker", "linux"],
+
+  // Security: Linux env → Burp Suite → OSINT → Bug Bounty
+  ["linux", "burp"],
   ["burp", "osint"],
   ["osint", "bugbounty"],
+
+  // Python scripting used for recon and automation in bug bounty
   ["python", "bugbounty"],
 
-  ["agents", "aws"],
-  ["agents", "node"],
+  // Python is the AI ecosystem language; LLMs power AI Agents
+  ["python", "llm"],
+  ["llm", "agents"],
 ];
 
 export const MINI_PROJECTS = [

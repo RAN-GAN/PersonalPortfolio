@@ -7,7 +7,7 @@ import { ACHIEVEMENTS } from "../../data/portfolio";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const ROTATIONS = [-1.4, 0.6, -0.8];
+const ROTATIONS = [-5, 2.5, -4];
 const PINNED_OFFSET = [
   { top: "10%",  left: "4%" },
   { top: "18%",  left: "36%" },
@@ -26,6 +26,7 @@ function PinIcon() {
 export default function SecurityBoard() {
   const sectionRef = useRef(null);
   const cardsRef   = useRef([]);
+  const isMobile   = typeof window !== "undefined" && window.innerWidth < 640;
 
   useGSAP(() => {
     cardsRef.current.forEach((card, i) => {
@@ -59,7 +60,7 @@ export default function SecurityBoard() {
           position: "absolute",
           inset: 0,
           backgroundImage:
-            "linear-gradient(rgba(28,25,23,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(28,25,23,0.04) 1px,transparent 1px)",
+            "linear-gradient(rgba(28,25,23,0.07) 1px,transparent 1px),linear-gradient(90deg,rgba(28,25,23,0.07) 1px,transparent 1px)",
           backgroundSize: "40px 40px",
           pointerEvents: "none",
         }}
@@ -74,7 +75,7 @@ export default function SecurityBoard() {
           fontFamily: '"DM Mono", monospace',
           fontSize: "clamp(4rem, 12vw, 10rem)",
           fontWeight: 700,
-          color: "rgba(28,25,23,0.025)",
+          color: "rgba(28,25,23,0.08)",
           letterSpacing: "-0.04em",
           userSelect: "none",
           pointerEvents: "none",
@@ -103,9 +104,9 @@ export default function SecurityBoard() {
               <div
                 key={i}
                 ref={el => (cardsRef.current[i] = el)}
-                className="relative bg-td-surface border border-td-border p-7 rounded-sm"
+                className="relative bg-td-surface border border-td-border p-6 sm:p-7 rounded-sm"
                 style={{
-                  transform: `rotate(${ROTATIONS[i]}deg)`,
+                  transform: isMobile ? "none" : `rotate(${ROTATIONS[i]}deg)`,
                   boxShadow: "3px 4px 18px rgba(28,25,23,0.08), 0 1px 3px rgba(28,25,23,0.05)",
                   willChange: "transform",
                 }}
@@ -158,8 +159,8 @@ export default function SecurityBoard() {
                     right: 0,
                     width: 0,
                     height: 0,
-                    borderLeft: "16px solid transparent",
-                    borderBottom: `16px solid rgba(28,25,23,0.07)`,
+                    borderLeft: "24px solid transparent",
+                    borderBottom: `24px solid rgba(28,25,23,0.18)`,
                   }}
                 />
               </div>

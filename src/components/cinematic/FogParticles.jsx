@@ -99,7 +99,7 @@ export default function FogParticles({ progressRef }) {
 
     const animate = () => {
       animId = requestAnimationFrame(animate);
-      t += 0.0008;
+      t += 0.0015;
 
       for (let i = 0; i < PARTICLE_COUNT; i++) {
         const i3 = i * 3;

@@ -36,7 +36,7 @@ export default function ChapterTitle({ number, title, light = false }) {
       >
         Chapter {number}
       </p>
-      <div className={`h-px w-12 mb-4 ${lineClass}`} />
+      <div className={`h-0.5 w-16 mb-4 ${lineClass}`} />
       <h2
         className={`font-display font-bold leading-tight ${inkClass}`}
         style={{

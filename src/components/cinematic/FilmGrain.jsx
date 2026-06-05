@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function FilmGrain({ opacity = 0.11 }) {
+export default function FilmGrain({ opacity = 0.20 }) {
   return (
     <svg
       style={{

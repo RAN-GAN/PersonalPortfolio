@@ -9,42 +9,45 @@ gsap.registerPlugin(ScrollTrigger);
 
 export default function AboutChapter() {
   const sectionRef = useRef(null);
-  const quoteRef   = useRef(null);
-  const linesRef   = useRef(null);
+  const quoteRef = useRef(null);
+  const linesRef = useRef(null);
 
-  useGSAP(() => {
-    // Parallax on pull-quote
-    gsap.to(quoteRef.current, {
-      y: -40,
-      ease: "none",
-      scrollTrigger: {
-        trigger: sectionRef.current,
-        start: "top bottom",
-        end: "bottom top",
-        scrub: true,
-      },
-    });
+  useGSAP(
+    () => {
+      // Parallax on pull-quote
+      gsap.to(quoteRef.current, {
+        y: -80,
+        ease: "none",
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: true,
+        },
+      });
 
-    // Stagger bio paragraphs
-    gsap.from(linesRef.current?.children ?? [], {
-      opacity: 0,
-      y: 24,
-      stagger: 0.14,
-      duration: 0.8,
-      ease: "power2.out",
-      scrollTrigger: {
-        trigger: linesRef.current,
-        start: "top 80%",
-        toggleActions: "play none none none",
-      },
-    });
-  }, { scope: sectionRef });
+      // Stagger bio paragraphs
+      gsap.from(linesRef.current?.children ?? [], {
+        opacity: 0,
+        y: 24,
+        stagger: 0.14,
+        duration: 0.8,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: linesRef.current,
+          start: "top 80%",
+          toggleActions: "play none none none",
+        },
+      });
+    },
+    { scope: sectionRef },
+  );
 
   return (
     <section
       id="about"
       ref={sectionRef}
-      className="relative bg-td-bg py-24 sm:py-32 overflow-hidden"
+      className="relative bg-td-bg py-20 sm:py-32 overflow-hidden"
     >
       {/* Subtle horizontal rule texture */}
       <div
@@ -53,12 +56,12 @@ export default function AboutChapter() {
           position: "absolute",
           inset: 0,
           backgroundImage:
-            "repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(28,25,23,0.03) 40px)",
+            "repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(28,25,23,0.07) 40px)",
           pointerEvents: "none",
         }}
       />
 
-      <div className="relative max-w-6xl mx-auto px-6 sm:px-12">
+      <div className="relative max-w-6xl mx-auto px-5 sm:px-12">
         <ChapterTitle number="01" title="Identity" />
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start">
@@ -70,7 +73,7 @@ export default function AboutChapter() {
                 fontFamily: '"SAILORS", serif',
                 fontSize: "clamp(1.8rem, 3.5vw, 3.2rem)",
                 letterSpacing: "-0.01em",
-                color: "#000",
+                color: "rgba(28,25,23,0.62)" ,
               }}
             >
               "Driven by curiosity. Learning by breaking and building."
@@ -83,6 +86,38 @@ export default function AboutChapter() {
               >
                 {PERSONAL.name}
               </span>
+            </div>
+
+            {/* Creation of Adam */}
+            <div
+              style={{
+                marginTop: "2.5rem",
+                animation: "fadeUp 0.9s ease 0.7s both",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
+              <img
+                src="/PersonalPortfolio/aoc.jpeg"
+                alt="Creation of Adam — human meets machine"
+                draggable="false"
+                style={{
+                  width: "70%",
+                  height: "auto",
+                  display: "block",
+                  opacity: 0.78,
+                  filter: "contrast(1.05)",
+                  userSelect: "none",
+                  borderRadius: "2px",
+                }}
+              />
+              <p
+                className="mt-2 font-mono text-[9px] uppercase tracking-[0.45em] text-td-muted"
+                style={{ fontFamily: '"DM Mono", monospace' }}
+              >
+                Human · Machine
+              </p>
             </div>
           </div>
 

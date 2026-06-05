@@ -102,10 +102,10 @@ function CaseCard({ project, index }) {
       {/* Corner accent */}
       <div
         aria-hidden="true"
-        className="absolute top-4 right-4 w-6 h-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+        className="absolute top-4 right-4 w-8 h-8 opacity-0 group-hover:opacity-100 transition-all duration-300"
         style={{
-          borderTop: "1px solid rgba(180,83,9,0.5)",
-          borderRight: "1px solid rgba(180,83,9,0.5)",
+          borderTop: "2px solid rgba(180,83,9,1)",
+          borderRight: "2px solid rgba(180,83,9,1)",
         }}
       />
     </article>
@@ -119,7 +119,7 @@ export default function CaseFilesSection() {
     <section
       id="projects"
       ref={sectionRef}
-      className="relative py-24 sm:py-32 bg-td-bg"
+      className="relative py-20 sm:py-32 bg-td-bg"
     >
       {/* Faint crosshatch background */}
       <div
@@ -128,13 +128,13 @@ export default function CaseFilesSection() {
           position: "absolute",
           inset: 0,
           backgroundImage:
-            "linear-gradient(rgba(28,25,23,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(28,25,23,0.025) 1px, transparent 1px)",
+            "linear-gradient(rgba(28,25,23,0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(28,25,23,0.07) 1px, transparent 1px)",
           backgroundSize: "60px 60px",
           pointerEvents: "none",
         }}
       />
 
-      <div className="relative max-w-6xl mx-auto px-6 sm:px-12">
+      <div className="relative max-w-6xl mx-auto px-5 sm:px-12">
         <ChapterTitle number="02" title="Investigations" />
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">

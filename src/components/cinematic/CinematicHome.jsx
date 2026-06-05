@@ -102,7 +102,7 @@ export default function CinematicHome() {
   return (
     <div ref={containerRef} className="cinematic-page relative">
       <FilmGrain opacity={0.10} />
-      <FogParticles progressRef={fogProgress} />
+      {/* <FogParticles progressRef={fogProgress} /> */}
 
       {/* Nav */}
       <nav
@@ -112,24 +112,30 @@ export default function CinematicHome() {
           left: 0,
           right: 0,
           zIndex: 80,
-          pointerEvents: "none",
-          padding: "14px 20px",
+          pointerEvents: "auto",
+          padding: "0 20px",
+          height: "56px",
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
+          background: "rgba(250,250,249,0.92)",
+          backdropFilter: "blur(12px)",
+          WebkitBackdropFilter: "blur(12px)",
+          borderBottom: "1px solid rgba(28,25,23,0.08)",
         }}
       >
         {/* Left: dynamic section label */}
         <span
           style={{
             fontFamily: '"SAILORS", serif',
-            fontSize: "clamp(1.1rem, 2.5vw, 2.2rem)",
+            fontSize: "clamp(1rem, 2.2vw, 1.8rem)",
             fontWeight: 900,
             textTransform: "uppercase",
             letterSpacing: "0.03em",
             color: "#000000",
-            transition: "opacity 0.35s",
+            transition: "color 0.35s",
             lineHeight: 1,
+            whiteSpace: "nowrap",
           }}
         >
           {activeLabel ?? "Portfolio"}
@@ -138,7 +144,7 @@ export default function CinematicHome() {
         {/* Right: nav links — hidden on mobile, visible sm+ */}
         <div
           className="hidden sm:flex"
-          style={{ gap: "24px", pointerEvents: "auto" }}
+          style={{ gap: "24px" }}
         >
           {NAV_SECTIONS.map(({ href, label }) => (
             <a
@@ -153,15 +159,36 @@ export default function CinematicHome() {
                 fontSize: "9px",
                 letterSpacing: "0.45em",
                 textTransform: "uppercase",
-                color: "rgba(28,25,23,0.30)",
+                color: "rgba(28,25,23,0.40)",
                 textDecoration: "none",
                 transition: "color 0.2s",
               }}
-              onMouseEnter={e => (e.currentTarget.style.color = "rgba(180,83,9,0.9)")}
-              onMouseLeave={e => (e.currentTarget.style.color = "rgba(28,25,23,0.30)")}
+              onMouseEnter={e => (e.currentTarget.style.color = "rgba(180,83,9,1)")}
+              onMouseLeave={e => (e.currentTarget.style.color = "rgba(28,25,23,0.40)")}
             >
               {label}
             </a>
+          ))}
+        </div>
+
+        {/* Mobile: section dots */}
+        <div className="flex sm:hidden items-center gap-1.5">
+          {NAV_SECTIONS.map(({ href, label }) => (
+            <button
+              key={href}
+              aria-label={label}
+              onClick={() => document.querySelector(href)?.scrollIntoView({ behavior: "smooth" })}
+              style={{
+                width: "6px",
+                height: "6px",
+                borderRadius: "50%",
+                background: activeLabel === label ? "#b45309" : "rgba(28,25,23,0.20)",
+                border: "none",
+                padding: 0,
+                cursor: "pointer",
+                transition: "background 0.3s",
+              }}
+            />
           ))}
         </div>
       </nav>
