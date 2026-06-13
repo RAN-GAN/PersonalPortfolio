@@ -11,8 +11,8 @@
   --color-td-amber-lt: #fbbf24;
   --color-td-sepia:    #a16207;
 
-  --font-display: "SAILORS", serif;
-  --font-body:    "Proxima Nova", system-ui, sans-serif;
+  --font-display: "SAILORS", "Fraunces", Georgia, serif;
+  --font-body:    "Proxima Nova", "DM Sans", system-ui, sans-serif;
   --font-mono:    "DM Mono", ui-monospace, monospace;
 }
 
@@ -67,7 +67,46 @@ html:not([data-cinematic]) main {
 }
 
 .cinematic-grain {
-  animation: grain 0.18s steps(1) infinite;
+  animation: grain 0.8s steps(1) infinite;
+  will-change: transform;
+}
+
+/* Visible keyboard focus on cinematic nav + links */
+.cinematic-page a:focus-visible,
+.cinematic-page button:focus-visible {
+  outline: 2px solid #b45309;
+  outline-offset: 3px;
+}
+
+/* ── Reduced motion: global safety net ── */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .cinematic-grain,
+  .archive-reveal {
+    animation: none !important;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ── Archive pages (Projects / Mini Projects) ── */
+.archive-reveal {
+  opacity: 0;
+  animation: fadeUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: var(--reveal-delay, 0s);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .archive-reveal {
+    opacity: 1;
+  }
 }
 
 /* Custom CSS Variables for dynamic colors */

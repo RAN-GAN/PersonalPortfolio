@@ -5,7 +5,9 @@ import { useGSAP } from "@gsap/react";
 import Lenis from "lenis";
 
 import FilmGrain from "./FilmGrain";
-import FogParticles from "./FogParticles";
+// FogParticles intentionally not imported — it pulls three.js (~600KB) into the
+// home bundle. Re-import alongside re-enabling its render below if needed.
+import { prefersReducedMotion } from "./useReducedMotion";
 import HeroSection from "./HeroSection";
 import AboutChapter from "./AboutChapter";
 import CaseFilesSection from "./CaseFilesSection";
@@ -14,6 +16,52 @@ import SecurityBoard from "./SecurityBoard";
 import ContactOutro from "./ContactOutro";
 
 gsap.registerPlugin(ScrollTrigger);
+
+// Thin amber reading-progress bar. Writes transform only (no layout), rAF-throttled.
+function ScrollProgress() {
+  const barRef = useRef(null);
+
+  useEffect(() => {
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      const doc = document.documentElement;
+      const max = doc.scrollHeight - window.innerHeight;
+      const p = max > 0 ? Math.min(1, window.scrollY / max) : 0;
+      if (barRef.current) barRef.current.style.transform = `scaleX(${p})`;
+    };
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(update);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+    update();
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      cancelAnimationFrame(raf);
+    };
+  }, []);
+
+  return (
+    <div
+      ref={barRef}
+      aria-hidden="true"
+      style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        right: 0,
+        height: "2px",
+        background: "#b45309",
+        transform: "scaleX(0)",
+        transformOrigin: "0 50%",
+        zIndex: 95,
+        pointerEvents: "none",
+      }}
+    />
+  );
+}
 
 export default function CinematicHome() {
   const containerRef  = useRef(null);
@@ -57,6 +105,9 @@ export default function CinematicHome() {
   }, []);
 
   useGSAP(() => {
+    // Reduced motion: no smooth scroll, no pinning — content reads statically
+    if (prefersReducedMotion()) return;
+
     const lenis = new Lenis({
       duration: 1.3,
       easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -68,19 +119,32 @@ export default function CinematicHome() {
     gsap.ticker.add(rafFn);
     gsap.ticker.lagSmoothing(0);
 
-    // Only pin hero on desktop — touch + pin is janky on mobile
+    // Only pin hero on desktop — touch + pin is janky on mobile.
+    // While pinned, hero performs a scrubbed cinematic exit: copy drifts up
+    // and dissolves, portrait dollies in, metadata strip fades.
     const hero = heroRef.current;
     if (hero && window.innerWidth >= 768) {
-      ScrollTrigger.create({
-        trigger: hero,
-        start: "top top",
-        end: "+=180%",
-        pin: true,
-        pinSpacing: true,
-        onUpdate: self => {
-          fogProgress.current = self.progress;
-        },
-      });
+      gsap
+        .timeline({
+          defaults: { ease: "none" },
+          scrollTrigger: {
+            trigger: hero,
+            start: "top top",
+            end: "+=120%",
+            pin: true,
+            pinSpacing: true,
+            scrub: true,
+            onUpdate: self => {
+              fogProgress.current = self.progress;
+            },
+          },
+        })
+        // Opacity intentionally omitted — GSAP reads opacity:0 at mount (before
+        // the 400ms ready timer fires) and would lock content invisible.
+        // Transform-only exit: React owns the opacity enter, GSAP owns the motion exit.
+        .to(".hero-copy",     { yPercent: -12 }, 0)
+        .to(".hero-portrait", { yPercent: -5, scale: 1.04 }, 0)
+        .to(".hero-strip",    { yPercent: 8 }, 0);
     }
 
     requestAnimationFrame(() => ScrollTrigger.refresh());
@@ -101,6 +165,7 @@ export default function CinematicHome() {
 
   return (
     <div ref={containerRef} className="cinematic-page relative">
+      <ScrollProgress />
       <FilmGrain opacity={0.10} />
       {/* <FogParticles progressRef={fogProgress} /> */}
 
@@ -127,7 +192,7 @@ export default function CinematicHome() {
         {/* Left: dynamic section label */}
         <span
           style={{
-            fontFamily: '"SAILORS", serif',
+            fontFamily: '"SAILORS", "Fraunces", Georgia, serif',
             fontSize: "clamp(1rem, 2.2vw, 1.8rem)",
             fontWeight: 900,
             textTransform: "uppercase",

@@ -52,6 +52,22 @@ export default function HeroSection() {
       className="relative min-h-screen overflow-hidden bg-td-bg"
       style={{ zIndex: 2 }}
     >
+      {/* Japanese image — full portrait ratio, very subtle atmospheric wash */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          inset: 0,
+          backgroundImage: "url('/PersonalPortfolio/japaneese.jpg')",
+          backgroundSize: "contain",
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "right bottom",
+          opacity: 0.04,
+          mixBlendMode: "multiply",
+          pointerEvents: "none",
+        }}
+      />
+
       {/* ── Case-file header ── */}
       {/* <div style={{
         position: "absolute", top: "3.5rem", left: 0, right: 0,
@@ -88,7 +104,7 @@ export default function HeroSection() {
       }}>
 
         {/* Text column */}
-        <div style={{ minWidth: 0, ...fade(0) }}>
+        <div className="hero-copy" style={{ minWidth: 0, ...fade(0) }}>
 
           {/* Amber bar + subject label */}
           <div style={{ display: "flex", alignItems: "flex-start", gap: "0.9rem", marginBottom: "clamp(1.5rem,4vh,2.5rem)" }}>
@@ -105,7 +121,7 @@ export default function HeroSection() {
 
           {/* Name — dominant anchor */}
           <h1 style={{
-            fontFamily: '"SAILORS", serif',
+            fontFamily: '"SAILORS", "Fraunces", Georgia, serif',
             fontSize: "clamp(3rem,9vw,9.5rem)",
             fontWeight: 900,
             letterSpacing: "-0.03em",
@@ -141,7 +157,7 @@ export default function HeroSection() {
         </div>
 
         {/* Portrait column */}
-        <div style={{
+        <div className="hero-portrait" style={{
           display: "flex",
           justifyContent: canvas.mobile ? "center" : "flex-end",
           alignItems: "center",
@@ -157,7 +173,7 @@ export default function HeroSection() {
       </div>
 
       {/* ── Bottom metadata strip ── */}
-      <div style={{
+      <div className="hero-strip" style={{
         position: "absolute", bottom: 0, left: 0, right: 0,
         padding: "0.9rem clamp(1.25rem,4vw,3rem)",
         display: "flex", justifyContent: "space-between", alignItems: "center",

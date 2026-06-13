@@ -1,12 +1,19 @@
 import { useState, useRef, useCallback, useEffect } from "react";
+import { prefersReducedMotion } from "./useReducedMotion";
 
 const CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
 export function useTextScramble(text, duration = 1400) {
-  const [displayText, setDisplayText] = useState(() => text.replace(/\S/g, CHARS[0]));
+  const [displayText, setDisplayText] = useState(() =>
+    prefersReducedMotion() ? text : text.replace(/\S/g, CHARS[0])
+  );
   const rafRef = useRef(null);
 
   const start = useCallback(() => {
+    if (prefersReducedMotion()) {
+      setDisplayText(text);
+      return;
+    }
     const startTime = performance.now();
     const len = text.length;
 

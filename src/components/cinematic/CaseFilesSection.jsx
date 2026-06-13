@@ -7,6 +7,7 @@ import { PROJECTS } from "../../data/portfolio";
 
 gsap.registerPlugin(ScrollTrigger);
 
+
 function CaseCard({ project, index }) {
   const ref = useRef(null);
 
@@ -28,8 +29,9 @@ function CaseCard({ project, index }) {
   return (
     <article
       ref={ref}
-      className="group relative bg-td-surface border border-td-border rounded-sm p-7 sm:p-9 transition-all duration-500 hover:-translate-y-1"
+      className="group relative border border-td-border rounded-sm p-7 sm:p-9 transition-all duration-500 hover:-translate-y-1"
       style={{
+        background: "linear-gradient(rgba(245,244,240,0.85), rgba(245,244,240,0.85)), url('/PersonalPortfolio/fan.jpeg') center/cover fixed",
         boxShadow: "0 2px 24px rgba(28,25,23,0.06), inset 0 0 0 1px rgba(180,83,9,0.0)",
         transition: "transform 0.4s ease, box-shadow 0.4s ease",
       }}

@@ -3,6 +3,7 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import ChapterTitle from "./ChapterTitle";
+import { useReducedMotion } from "./useReducedMotion";
 import { SKILLS, SKILL_EDGES } from "../../data/portfolio";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -25,15 +26,6 @@ const GROUP_LABELS = {
   ai:       "AI / ML",
 };
 
-// Faint cluster watermark labels
-const CLUSTER_BG = [
-  { text: "FRONTEND", x: 198,  y: 210 },
-  { text: "BACKEND",  x: 528,  y: 178 },
-  { text: "DATABASE", x: 758,  y: 190 },
-  { text: "CLOUD",    x: 928,  y: 208 },
-  { text: "SECURITY", x: 315,  y: 368 },
-  { text: "AI",       x: 828,  y: 362 },
-];
 
 const VB_W   = 1000;
 const VB_H   = 425;
@@ -47,13 +39,27 @@ export default function SkillsNetwork() {
   const svgRef     = useRef(null);
 
   const [entered,  setEntered]  = useState(false);
+  const [inView,   setInView]   = useState(false);
   const [hovered,  setHovered]  = useState(null);
   const [isMobile, setIsMobile] = useState(() => window.innerWidth < 640);
+  const reduced   = useReducedMotion();
+  const bgRef     = useRef(null);
+  const stampRef  = useRef(null);
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 640);
     window.addEventListener("resize", check);
     return () => window.removeEventListener("resize", check);
+  }, []);
+
+  // Pause zap animations when section is off-screen
+  useEffect(() => {
+    const io = new IntersectionObserver(
+      ([entry]) => setInView(entry.isIntersecting),
+      { threshold: 0 }
+    );
+    if (sectionRef.current) io.observe(sectionRef.current);
+    return () => io.disconnect();
   }, []);
 
   useGSAP(() => {
@@ -63,11 +69,22 @@ export default function SkillsNetwork() {
       onEnter: () => setEntered(true),
       once: true,
     });
+
+    if (!reduced) {
+      const fullTrigger = {
+        trigger: sectionRef.current,
+        start: "top bottom",
+        end: "bottom top",
+        scrub: true,
+      };
+      gsap.to(bgRef.current,    { yPercent: -15, ease: "none", scrollTrigger: fullTrigger });
+      gsap.to(stampRef.current, { y: -70,        ease: "none", scrollTrigger: fullTrigger });
+    }
   }, { scope: sectionRef });
 
   // Draw-in edges + pop-in nodes when section enters
   useEffect(() => {
-    if (!entered || !svgRef.current || isMobile) return;
+    if (!entered || !svgRef.current || isMobile || reduced) return;
 
     const lines = svgRef.current.querySelectorAll(".skill-edge");
     lines.forEach((line, i) => {
@@ -90,7 +107,7 @@ export default function SkillsNetwork() {
         n.style.transform  = "scale(1)";
       }, 50);
     });
-  }, [entered, isMobile]);
+  }, [entered, isMobile, reduced]);
 
   const skillMap = Object.fromEntries(SKILLS.map(s => [s.id, s]));
 
@@ -123,6 +140,59 @@ export default function SkillsNetwork() {
       ref={sectionRef}
       className="relative py-20 sm:py-32 bg-td-surface overflow-hidden"
     >
+      {/* Surface colour layer — parallaxes at 85% scroll speed */}
+      <div
+        ref={bgRef}
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          inset: "-15% 0",
+          background: "inherit",
+          pointerEvents: "none",
+        }}
+      />
+
+      {/* skills.jpeg atmospheric background — sits above the solid base */}
+      <img
+        aria-hidden="true"
+        src="/PersonalPortfolio/skills.jpeg"
+        alt=""
+        draggable="false"
+        style={{
+          position: "absolute",
+          inset: 0,
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+          objectPosition: "center",
+          opacity: 0.1,
+          mixBlendMode: "multiply",
+          pointerEvents: "none",
+          userSelect: "none",
+        }}
+      />
+
+      {/* "ARSENAL" chapter watermark */}
+      <div
+        ref={stampRef}
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          top: "10%",
+          left: "-1%",
+          fontFamily: '"SAILORS", "Fraunces", Georgia, serif',
+          fontSize: "clamp(5rem, 16vw, 13rem)",
+          fontWeight: 900,
+          color: "rgba(28,25,23,0.035)",
+          letterSpacing: "-0.04em",
+          lineHeight: 1,
+          userSelect: "none",
+          pointerEvents: "none",
+        }}
+      >
+        Arsenal
+      </div>
+
       <div className="relative max-w-6xl mx-auto px-5 sm:px-12">
         <ChapterTitle number="03" title="Arsenal" />
 
@@ -157,26 +227,6 @@ export default function SkillsNetwork() {
               style={{ width: "100%", height: "auto", display: "block", overflow: "visible" }}
               aria-label="Skills network diagram"
             >
-              {/* Cluster watermarks */}
-              {CLUSTER_BG.map(({ text, x, y }) => (
-                <text
-                  key={text} x={x} y={y}
-                  textAnchor="middle"
-                  fill="#1c1917"
-                  opacity="0.042"
-                  style={{
-                    fontFamily: '"SAILORS", serif',
-                    fontSize: "44px",
-                    fontWeight: 900,
-                    letterSpacing: "0.1em",
-                    userSelect: "none",
-                    pointerEvents: "none",
-                  }}
-                >
-                  {text}
-                </text>
-              ))}
-
               {/* Edges */}
               {SKILL_EDGES.map(([a, b], i) => {
                 const na = skillMap[a], nb = skillMap[b];
@@ -198,8 +248,8 @@ export default function SkillsNetwork() {
                 );
               })}
 
-              {/* Zap pulses */}
-              {entered && SKILL_EDGES.map(([a, b], i) => {
+              {/* Zap pulses — only while section is visible, off under reduced motion */}
+              {entered && inView && !reduced && SKILL_EDGES.map(([a, b], i) => {
                 const na = skillMap[a], nb = skillMap[b];
                 if (!na || !nb) return null;
                 const len    = Math.hypot(nb.x - na.x, nb.y - na.y);

@@ -2,6 +2,7 @@ import React, { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { prefersReducedMotion } from "./useReducedMotion";
 import ChapterTitle from "./ChapterTitle";
 import { BIO, PERSONAL } from "../../data/portfolio";
 
@@ -9,22 +10,28 @@ gsap.registerPlugin(ScrollTrigger);
 
 export default function AboutChapter() {
   const sectionRef = useRef(null);
-  const quoteRef = useRef(null);
-  const linesRef = useRef(null);
+  const quoteRef   = useRef(null);
+  const linesRef   = useRef(null);
+  const bgRef      = useRef(null);
 
   useGSAP(
     () => {
-      // Parallax on pull-quote
-      gsap.to(quoteRef.current, {
-        y: -80,
-        ease: "none",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top bottom",
-          end: "bottom top",
-          scrub: true,
-        },
-      });
+      if (prefersReducedMotion()) return;
+
+      const fullTrigger = {
+        trigger: sectionRef.current,
+        start: "top bottom",
+        end: "bottom top",
+        scrub: true,
+      };
+
+      // Rule-line texture drifts slower than content — subtle background depth
+      gsap.to(bgRef.current, { yPercent: -12, ease: "none", scrollTrigger: fullTrigger });
+
+      // Smaller parallax on mobile — the gap between the "Identity" chapter
+      // title and the quote is ~32px, so cap y at -18 to prevent overlap.
+      const parallaxY = window.innerWidth >= 1024 ? -60 : -18;
+      gsap.to(quoteRef.current, { y: parallaxY, ease: "none", scrollTrigger: fullTrigger });
 
       // Stagger bio paragraphs
       gsap.from(linesRef.current?.children ?? [], {
@@ -47,14 +54,15 @@ export default function AboutChapter() {
     <section
       id="about"
       ref={sectionRef}
-      className="relative bg-td-bg py-20 sm:py-32 overflow-hidden"
+      className="relative bg-td-bg pt-20 sm:pt-32 pb-10 sm:pb-14 overflow-hidden"
     >
-      {/* Subtle horizontal rule texture */}
+      {/* Subtle horizontal rule texture — parallaxes at its own rate */}
       <div
+        ref={bgRef}
         aria-hidden="true"
         style={{
           position: "absolute",
-          inset: 0,
+          inset: "-12% 0",
           backgroundImage:
             "repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(28,25,23,0.07) 40px)",
           pointerEvents: "none",
@@ -67,13 +75,14 @@ export default function AboutChapter() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start">
           {/* Pull quote — parallaxes up on scroll */}
           <div ref={quoteRef} className="lg:sticky lg:top-24">
+
             <blockquote
               className="font-display font-bold text-td-ink leading-snug"
               style={{
-                fontFamily: '"SAILORS", serif',
-                fontSize: "clamp(1.8rem, 3.5vw, 3.2rem)",
+                fontFamily: '"SAILORS", "Fraunces", Georgia, serif',
+                fontSize: "clamp(1.35rem, 3.5vw, 3.2rem)",
                 letterSpacing: "-0.01em",
-                color: "rgba(28,25,23,0.62)" ,
+                color: "rgba(28,25,23,0.62)",
               }}
             >
               "Driven by curiosity. Learning by breaking and building."
@@ -116,19 +125,33 @@ export default function AboutChapter() {
                 className="mt-2 font-mono text-[9px] uppercase tracking-[0.45em] text-td-muted"
                 style={{ fontFamily: '"DM Mono", monospace' }}
               >
-                Human · Machine
+                Will I fly or will I fall?
               </p>
             </div>
           </div>
 
           {/* Bio paragraphs */}
-          <div ref={linesRef} className="flex flex-col gap-6">
+          <div ref={linesRef} className="flex flex-col gap-6" style={{ position: "relative" }}>
+            {/* Bamboo behind the description text */}
+            <div
+              aria-hidden="true"
+              style={{
+                position: "absolute",
+                inset: "-6% -4%",
+                backgroundImage: "url('/PersonalPortfolio/bamboo.jpeg')",
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                opacity: 0.04,
+                mixBlendMode: "multiply",
+                pointerEvents: "none",
+              }}
+            />
             {BIO.long.map((para, i) => (
               <p
                 key={i}
                 className="text-td-muted leading-relaxed"
                 style={{
-                  fontFamily: '"Proxima Nova", system-ui, sans-serif',
+                  fontFamily: '"Proxima Nova", "DM Sans", system-ui, sans-serif',
                   fontSize: "clamp(1rem, 1.3vw, 1.15rem)",
                   fontWeight: 400,
                   lineHeight: 1.85,

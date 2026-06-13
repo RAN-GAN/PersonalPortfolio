@@ -2,6 +2,7 @@ import React, { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { prefersReducedMotion } from "./useReducedMotion";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -9,6 +10,7 @@ export default function ChapterTitle({ number, title, light = false }) {
   const ref = useRef(null);
 
   useGSAP(() => {
+    if (prefersReducedMotion()) return;
     const el = ref.current;
     if (!el) return;
     gsap.from(el, {
@@ -40,7 +42,7 @@ export default function ChapterTitle({ number, title, light = false }) {
       <h2
         className={`font-display font-bold leading-tight ${inkClass}`}
         style={{
-          fontFamily: '"SAILORS", serif',
+          fontFamily: '"SAILORS", "Fraunces", Georgia, serif',
           fontSize: "clamp(2rem, 5vw, 4rem)",
           letterSpacing: "-0.01em",
           color: "#000",

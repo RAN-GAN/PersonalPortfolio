@@ -15,8 +15,8 @@ export default {
           "Arial",
           "sans-serif",
         ],
-        display: ["SAILORS", "serif"],
-        body: ["Proxima Nova", "system-ui", "sans-serif"],
+        display: ["SAILORS", "Fraunces", "Georgia", "serif"],
+        body: ["Proxima Nova", "DM Sans", "system-ui", "sans-serif"],
         mono: ["DM Mono", "ui-monospace", "monospace"],
       },
       colors: {

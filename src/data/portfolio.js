@@ -159,14 +159,14 @@ export const SKILL_EDGES = [
 ];
 
 export const MINI_PROJECTS = [
-  { title: "Rewards Automator", desc: "Python tool automating Microsoft Bing searches to collect reward points." },
-  { title: "PPT-to-Audio", desc: "Python GUI app that extracts PPT content and converts it to audio." },
-  { title: "Birthday Lookup", desc: "React site displaying today's and upcoming college birthdays." },
-  { title: "whatsRead", desc: "Webpage for viewing WhatsApp exported chats in a clean format." },
-  { title: "YouTube Subtitle Extractor", desc: "Browser extension extracting YouTube video subtitles to console." },
-  { title: "Autotyper", desc: "Hotkey-driven tool that types saved text or injects clipboard content." },
-  { title: "ChatHost", desc: "Lightweight site for sharing text or files with real-time chat." },
-  { title: "Carbon GPT", desc: "Estimates the carbon footprint of your ChatGPT usage." },
-  { title: "Student Management Portal", desc: "Feature-packed dashboard for staff to manage student information." },
-  { title: "MTechDash", desc: "Unified student dashboard with everything needed in one place." },
+  { title: "Rewards Automator", desc: "A Python tool that automates Microsoft Bing searches to collect reward points." },
+  { title: "PPT-to-Audio", desc: "A Python GUI application that extracts content from a PPT file and converts it into an audio file." },
+  { title: "Birthday Lookup", desc: "A React website that displays today’s and upcoming birthdays of students in my college." },
+  { title: "whatsRead", desc: "A simple webpage that lets you view WhatsApp exported chats in a clean, readable format." },
+  { title: "YouTube Subtitle Extractor Extension", desc: "A browser extension that extracts the subtitles of a YouTube video and logs them in the console." },
+  { title: "Autotyper", desc: "A hotkey-driven AutoTyper that types text from a saved file or injects clipboard content based on the selected trigger." },
+  { title: "ChatHost", desc: "A lightweight site for sharing text or files with real-time chat built in." },
+  { title: "Carbon GPT", desc: "A simple tool that estimates the carbon footprint of your ChatGPT usage." },
+  { title: "Student Management Portal", desc: "A clean, feature-packed dashboard for staff to manage student information." },
+  { title: "MTechDash (ongoing)", desc: "A unified dashboard designed to give students everything they need in one place." },
 ];

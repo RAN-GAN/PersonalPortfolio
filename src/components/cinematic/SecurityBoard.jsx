@@ -2,6 +2,7 @@ import React, { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { prefersReducedMotion } from "./useReducedMotion";
 import ChapterTitle from "./ChapterTitle";
 import { ACHIEVEMENTS } from "../../data/portfolio";
 
@@ -26,9 +27,24 @@ function PinIcon() {
 export default function SecurityBoard() {
   const sectionRef = useRef(null);
   const cardsRef   = useRef([]);
+  const bgRef      = useRef(null);
+  const stampRef   = useRef(null);
   const isMobile   = typeof window !== "undefined" && window.innerWidth < 640;
 
   useGSAP(() => {
+    if (prefersReducedMotion()) return;
+
+    const fullTrigger = {
+      trigger: sectionRef.current,
+      start: "top bottom",
+      end: "bottom top",
+      scrub: true,
+    };
+    // Grid texture drifts slower than content — depth layer
+    gsap.to(bgRef.current,    { yPercent: -15, ease: "none", scrollTrigger: fullTrigger });
+    // INTEL stamp floats upward at its own rate — cinematic watermark motion
+    gsap.to(stampRef.current, { y: -100,       ease: "none", scrollTrigger: fullTrigger });
+
     cardsRef.current.forEach((card, i) => {
       if (!card) return;
       gsap.from(card, {
@@ -53,20 +69,22 @@ export default function SecurityBoard() {
       ref={sectionRef}
       className="relative py-24 sm:py-32 bg-td-bg overflow-hidden"
     >
-      {/* Grid board texture */}
+      {/* Grid board texture — parallaxes at its own rate */}
       <div
+        ref={bgRef}
         aria-hidden="true"
         style={{
           position: "absolute",
-          inset: 0,
+          inset: "-15% 0",
           backgroundImage:
             "linear-gradient(rgba(28,25,23,0.07) 1px,transparent 1px),linear-gradient(90deg,rgba(28,25,23,0.07) 1px,transparent 1px)",
           backgroundSize: "40px 40px",
           pointerEvents: "none",
         }}
       />
-      {/* Faded headline stamp */}
+      {/* INTEL stamp — floats upward independently */}
       <div
+        ref={stampRef}
         aria-hidden="true"
         style={{
           position: "absolute",
@@ -108,7 +126,6 @@ export default function SecurityBoard() {
                 style={{
                   transform: isMobile ? "none" : `rotate(${ROTATIONS[i]}deg)`,
                   boxShadow: "3px 4px 18px rgba(28,25,23,0.08), 0 1px 3px rgba(28,25,23,0.05)",
-                  willChange: "transform",
                 }}
               >
                 <PinIcon />
@@ -123,7 +140,7 @@ export default function SecurityBoard() {
                 <h3
                   className="font-display font-medium text-td-ink mb-3 leading-tight"
                   style={{
-                    fontFamily: '"SAILORS", serif',
+                    fontFamily: '"SAILORS", "Fraunces", Georgia, serif',
                     fontSize: "clamp(1.2rem, 2vw, 1.6rem)",
                     color: "#000",
                   }}
