@@ -95,11 +95,11 @@ const CinematicLoader = ({ onComplete, onReveal }) => {
           ease: "expo.inOut",
         }, "<")
         .to(lineRef.current, {
-          duration: 0.6,
+          duration: 0.4,
           scaleX: 0,
           opacity: 0,
-          ease: "power4.in"
-        }, "-=0.6")
+          ease: "power2.out"
+        }, "-=1.1") // Start fading almost immediately after panels start moving (1.2s duration - 1.1s)
         .to(containerRef.current, {
           duration: 0.2,
           opacity: 0,
