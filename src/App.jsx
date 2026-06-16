@@ -1,7 +1,8 @@
-import React, { Suspense, lazy } from "react";
+import React, { Suspense, lazy, useState, useEffect } from "react";
 import { HashRouter, Routes, Route } from "react-router-dom";
+import CinematicLoader from "./components/cinematic/CinematicLoader";
+import CinematicHome from "./components/cinematic/CinematicHome";
 
-const CinematicHome     = lazy(() => import("./components/cinematic/CinematicHome"));
 const ProjectsPage      = lazy(() => import("./pages/ProjectsPage"));
 const MiniProjectsPage  = lazy(() => import("./pages/MiniProjectsPage"));
 const TechStackPage     = lazy(() => import("./pages/TechStackPage"));
@@ -10,26 +11,7 @@ const FreelancePortfolio = lazy(() => import("./pages/FreelancePortfolio"));
 function AppRoutes() {
   return (
     <>
-      <Suspense
-        fallback={
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              minHeight: "100vh",
-              fontFamily: '"DM Mono", monospace',
-              fontSize: "11px",
-              letterSpacing: "0.4em",
-              textTransform: "uppercase",
-              color: "rgba(28,25,23,0.4)",
-              background: "#fafaf9",
-            }}
-          >
-            Loading...
-          </div>
-        }
-      >
+      <Suspense fallback={null}>
         <Routes>
           <Route path="/"             element={<CinematicHome />} />
           <Route path="/projects"     element={<ProjectsPage />} />
@@ -44,11 +26,28 @@ function AppRoutes() {
 }
 
 function App() {
+  const [isBooted, setIsBooted] = useState(false);
+  const [showContent, setShowContent] = useState(false);
+
+  useEffect(() => {
+    if (!showContent) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+  }, [showContent]);
+
   return (
     <div className="min-h-screen relative font-medium">
-      <HashRouter>
-        <AppRoutes />
-      </HashRouter>
+      <CinematicLoader 
+        onReveal={() => setShowContent(true)}
+        onComplete={() => setIsBooted(true)} 
+      />
+      <div className={showContent ? "opacity-100" : "opacity-0"} style={{ transition: "opacity 0.8s ease-out" }}>
+        <HashRouter>
+          <AppRoutes />
+        </HashRouter>
+      </div>
     </div>
   );
 }

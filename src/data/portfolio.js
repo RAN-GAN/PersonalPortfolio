@@ -60,6 +60,13 @@ export const PROJECTS = [
     tags: ["React", "Vite", "Algorithm", "Open Source"],
     link: "https://ran-gan.github.io/SKCET-CGPA/",
   },
+  {
+    id: "05",
+    title: "SMSFlare",
+    desc: "A private, self-hosted SMS gateway that transforms Android devices into a secure communication pipeline using Cloudflare Workers and D1.",
+    tags: ["Cloudflare Workers", "Next.js", "Kotlin", "D1", "Edge Computing"],
+    link: "https://github.com/RAN-GAN/smsFlare",
+  },
 ];
 
 export const ACHIEVEMENTS = [
