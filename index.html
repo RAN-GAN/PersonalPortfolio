@@ -42,13 +42,44 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="modulepreload" href="data:text/jsx;base64,aW1wb3J0IHsgU3RyaWN0TW9kZSB9IGZyb20gJ3JlYWN0JwppbXBvcnQgeyBjcmVhdGVSb290IH0gZnJvbSAncmVhY3QtZG9tL2NsaWVudCcKaW1wb3J0ICcuL2luZGV4LmNzcycKaW1wb3J0IEFwcCBmcm9tICcuL0FwcC5qc3gnCgpjcmVhdGVSb290KGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdyb290JykpLnJlbmRlcigKICA8U3RyaWN0TW9kZT4KICAgIDxBcHAgLz4KICA8L1N0cmljdE1vZGU+LAopCg==" />
     <!-- SAILORS and Proxima Nova load via font host when available; Fraunces + DM Sans (index.css) are the live fallbacks -->
     <title>Pradeep Chandran M - Portfolio</title>
-    <script type="module" crossorigin src="/PersonalPortfolio/assets/index-BLg8RGcS.js"></script>
+    <script type="module" crossorigin src="/PersonalPortfolio/assets/index-BXjXoUPH.js"></script>
     <link rel="modulepreload" crossorigin href="/PersonalPortfolio/assets/vendor-bZDf1IHH.js">
-    <link rel="stylesheet" crossorigin href="/PersonalPortfolio/assets/index-CWuZUB0t.css">
+    <link rel="stylesheet" crossorigin href="/PersonalPortfolio/assets/index-Nhgkl-o5.css">
   </head>
-  <body>
-    <div id="root"></div>
+  <body style="margin: 0; background: #fafaf9;">
+    <div id="root">
+      <!-- Initial HTML-only shell: Cinematic/Minimalist theme -->
+      <div id="boot-shell" style="
+        position: fixed;
+        inset: 0;
+        background: #fafaf9;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        font-family: serif;
+        color: #1c1917;
+        z-index: 99999;
+      ">
+        <div style="
+          font-family: 'SAILORS', 'Fraunces', Georgia, serif;
+          font-size: 24px;
+          font-weight: 900;
+          letter-spacing: 0.15em;
+          text-transform: uppercase;
+          margin-bottom: 24px;
+          opacity: 0.8;
+        ">Initializing</div>
+        <div style="width: 160px; height: 1px; background: rgba(28,25,23,0.1); position: relative; overflow: hidden;">
+          <div style="position: absolute; top: 0; left: 0; height: 100%; background: #b45309; width: 40%; animation: slide 1.5s infinite ease-in-out;"></div>
+        </div>
+      </div>
+      <style>
+        @keyframes slide { 0% { transform: translateX(-100%); } 100% { transform: translateX(250%); } }
+      </style>
+    </div>
   </body>
 </html>
