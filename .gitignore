@@ -25,3 +25,6 @@ dist-ssr
 worker/now-playing-worker.js
 .agents/
 /.claude/*
+
+# Original (licensed) font archives — only the built woff2 in public/fonts ships
+fonts-src/

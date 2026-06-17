@@ -1,6 +1,40 @@
 @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=DM+Mono:ital,wght@0,400;0,500;1,400&family=DM+Sans:ital,wght@0,300..600;1,300..600&display=swap');
 @import "tailwindcss";
 
+/* ── Self-hosted primary fonts ──────────────────────────────────────────────
+   Drop the licensed .woff2 files into public/fonts/ (see public/fonts/README.md).
+   Until they exist these @font-face rules 404 silently and the stack falls back
+   to Fraunces / DM Sans (declared in @theme below). Paths include the Vite base
+   ("/PersonalPortfolio/") so they resolve in dev and on GitHub Pages. */
+@font-face {
+  font-family: "SAILORS";
+  src: url("/PersonalPortfolio/fonts/sailors.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Proxima Nova";
+  src: url("/PersonalPortfolio/fonts/proxima-nova-regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Proxima Nova";
+  src: url("/PersonalPortfolio/fonts/proxima-nova-semibold.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Proxima Nova";
+  src: url("/PersonalPortfolio/fonts/proxima-nova-bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 @theme {
   --color-td-bg:       #fafaf9;
   --color-td-surface:  #f5f4f0;
@@ -71,11 +105,22 @@ html:not([data-cinematic]) main {
   will-change: transform;
 }
 
-/* Visible keyboard focus on cinematic nav + links */
-.cinematic-page a:focus-visible,
-.cinematic-page button:focus-visible {
+/* Visible keyboard focus — global, every theme (was previously scoped to
+   .cinematic-page only, which left the freelance page with no focus ring). */
+a:focus-visible,
+button:focus-visible,
+[role="button"]:focus-visible,
+[tabindex]:focus-visible {
   outline: 2px solid #b45309;
   outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* Freelance page is dark — amber ring needs a light halo to read on near-black. */
+.freelance-theme a:focus-visible,
+.freelance-theme button:focus-visible {
+  outline-color: #C75B21;
+  box-shadow: 0 0 0 4px rgba(247, 243, 236, 0.15);
 }
 
 /* ── Reduced motion: global safety net ── */

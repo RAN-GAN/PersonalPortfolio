@@ -14,14 +14,18 @@ const FreelancePortfolio = () => {
     document.title = "Pradeep | Web Development";
     document.body.style.backgroundColor = "#F7F3EC";
     document.body.style.overflowX = "hidden";
+    // Opt out of the global mandatory scroll-snap (meant for archive pages);
+    // this is a long marketing scroll, snapping is wrong here.
+    document.documentElement.dataset.cinematic = "true";
     return () => {
       document.body.style.backgroundColor = "";
       document.body.style.overflowX = "";
+      delete document.documentElement.dataset.cinematic;
     };
   }, []);
 
   return (
-    <div style={{
+    <div className="freelance-theme" style={{
       fontFamily: "'DM Mono', monospace",
       backgroundColor: '#F7F3EC',
       color: '#1A1816',

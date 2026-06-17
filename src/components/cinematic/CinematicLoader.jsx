@@ -54,7 +54,7 @@ const CinematicLoader = ({ onComplete, onReveal }) => {
         proceedToReveal();
       } else {
         if (!resourcesReadyRef.current) setStatus("FETCHING DATA");
-        else if (!imagesLoaded) setStatus("DEVELOPING VISUALS");
+        else if (!imagesLoaded) setStatus("ZESTING");
         else if (!bootFinished.current) setStatus("PREPARING");
         
         gsap.delayedCall(0.2, checkReady);
@@ -154,7 +154,7 @@ const CinematicLoader = ({ onComplete, onReveal }) => {
       {/* Content */}
       <div ref={contentRef} className="relative z-20 flex flex-col items-center">
         <div className="text-[10px] tracking-[0.6em] uppercase text-[#1c1917]/30 mb-6 font-mono">
-          System Initialization
+          Loading 
         </div>
         
         <div 

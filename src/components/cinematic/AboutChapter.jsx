@@ -125,7 +125,7 @@ export default function AboutChapter() {
                 className="mt-2 font-mono text-[9px] uppercase tracking-[0.45em] text-td-muted"
                 style={{ fontFamily: '"DM Mono", monospace' }}
               >
-                Will I fly or will I fall?
+                Ad astra per aspera!
               </p>
             </div>
           </div>

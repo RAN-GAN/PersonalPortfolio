@@ -3,8 +3,8 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { prefersReducedMotion } from "./useReducedMotion";
+import { InkAmbient } from "../ui/ink-reveal";
 import { Link } from "react-router-dom";
-import NowPlaying from "../NowPlaying";
 import { PERSONAL } from "../../data/portfolio";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -54,25 +54,16 @@ export default function ContactOutro() {
       ref={sectionRef}
       className="relative min-h-screen flex flex-col justify-center py-12 bg-td-bg overflow-hidden"
     >
-      {/* pattern.jpeg — full-section atmospheric texture */}
-      <img
-        aria-hidden="true"
+      {/* pattern.jpeg — atmospheric ink-bloom revealed under the cursor.
+          Shallow carve keeps the name + links the focus; static faint texture
+          on touch / reduced-motion. */}
+      <InkAmbient
         src="/PersonalPortfolio/pattern.jpeg"
-        alt=""
-        draggable="false"
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100%",
-          objectFit: "cover",
-          objectPosition: "center",
-          opacity: 0.055,
-          mixBlendMode: "multiply",
-          pointerEvents: "none",
-          userSelect: "none",
-        }}
+        maskColor={[250, 250, 249]}
+        maskOpacity={0.955}
+        staticOpacity={0.055}
+        revealStops={[0.14, 0.1, 0]}
+        brushSize={140}
       />
 
       {/* Vignette edges — fills section exactly */}
@@ -112,7 +103,22 @@ export default function ContactOutro() {
         Contact
       </div>
 
-      <div className="relative max-w-4xl mx-auto px-6 sm:px-12 text-center" ref={innerRef}>
+      {/* Legibility scrim — keeps a bright halo behind the centred text so the
+          ink bloom never drops contrast on the copy, while still letting the
+          effect breathe toward the section edges. */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          inset: 0,
+          zIndex: 5,
+          pointerEvents: "none",
+          background:
+            "radial-gradient(ellipse 70% 58% at 50% 50%, rgba(250,250,249,0.86) 0%, rgba(250,250,249,0.55) 42%, rgba(250,250,249,0) 75%)",
+        }}
+      />
+
+      <div className="relative z-10 max-w-4xl mx-auto px-5 sm:px-12 text-center" ref={innerRef}>
         <p
           className="font-mono text-[10px] uppercase tracking-[0.5em] text-td-muted mb-3"
           style={{ fontFamily: '"DM Mono", monospace' }}
@@ -141,7 +147,7 @@ export default function ContactOutro() {
         </p>
 
         {/* Links */}
-        <div className="flex flex-wrap justify-center gap-x-10 gap-y-3 mb-8">
+        <div className="flex flex-wrap justify-center gap-x-6 sm:gap-x-10 gap-y-3 mb-8">
           {LINKS.map(({ label, href, external, download }) =>
             external || download ? (
               <a
@@ -168,15 +174,10 @@ export default function ContactOutro() {
           )}
         </div>
 
-        {/* NowPlaying widget */}
-        <div className="flex justify-center mb-8">
-          <div style={{ opacity: 0.85, filter: "grayscale(0.2)" }}>
-            <NowPlaying />
-          </div>
-        </div>
+
 
         {/* Back to other sections */}
-        <div className="flex justify-center gap-8 mb-6">
+        <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 sm:gap-8 mb-6">
           <Link
             to="/projects"
             className="font-mono text-[9px] uppercase tracking-[0.45em] text-td-muted hover:text-td-amber transition-colors"

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import DoubleExposureCanvas from "./DoubleExposureCanvas";
 import NowPlaying from "./NowPlaying";
 import { useTextScramble } from "./TextScramble";
+import { InkAmbient } from "../ui/ink-reveal";
 import { PERSONAL } from "../../data/portfolio";
 
 const HEADLINE    = "Building Systems. Finding Vulnerabilities. Solving Problems.";
@@ -52,20 +53,18 @@ export default function HeroSection() {
       className="relative min-h-screen overflow-hidden bg-td-bg"
       style={{ zIndex: 2 }}
     >
-      {/* Japanese image — full portrait ratio, very subtle atmospheric wash */}
-      <div
-        aria-hidden="true"
-        style={{
-          position: "absolute",
-          inset: 0,
-          backgroundImage: "url('/PersonalPortfolio/japaneese.jpg')",
-          backgroundSize: "contain",
-          backgroundRepeat: "no-repeat",
-          backgroundPosition: "right bottom",
-          opacity: 0.04,
-          mixBlendMode: "multiply",
-          pointerEvents: "none",
-        }}
+      {/* Japanese image — atmospheric ink-bloom that follows the cursor.
+          Carve is kept very shallow so it only nudges the image into view;
+          the headline stays the focus. Falls back to a faint static wash on
+          touch / reduced-motion. */}
+      <InkAmbient
+        src="/PersonalPortfolio/japaneese.jpg"
+        maskColor={[250, 250, 249]}
+        maskOpacity={0.96}
+        staticOpacity={0.04}
+        revealStops={[0.16, 0.11, 0]}
+        brushSize={150}
+        imageStyle={{ objectFit: "contain", objectPosition: "right bottom" }}
       />
 
       {/* ── Case-file header ── */}
@@ -95,6 +94,8 @@ export default function HeroSection() {
 
       {/* ── Main grid ── */}
       <div style={{
+        position: "relative",
+        zIndex: 2,
         display: "grid",
         gridTemplateColumns: canvas.mobile ? "1fr" : `minmax(0,1fr) 33vw`,
         alignItems: "center",
@@ -107,7 +108,7 @@ export default function HeroSection() {
         <div className="hero-copy" style={{ minWidth: 0, ...fade(0) }}>
 
           {/* Amber bar + subject label */}
-          <div style={{ display: "flex", alignItems: "flex-start", gap: "0.9rem", marginBottom: "clamp(1.5rem,4vh,2.5rem)" }}>
+          {/* <div style={{ display: "flex", alignItems: "flex-start", gap: "0.9rem", marginBottom: "clamp(1.5rem,4vh,2.5rem)" }}>
             <div style={{ width: "2px", height: "3.2rem", background: "#b45309", flexShrink: 0, marginTop: "0.2rem" }} />
             <div>
               <p style={{ ...mono, fontSize: "clamp(0.55rem,0.78vw,0.65rem)", letterSpacing: "0.45em", textTransform: "uppercase", color: "rgba(28,25,23,0.55)", marginBottom: "0.3rem" }}>
@@ -117,7 +118,7 @@ export default function HeroSection() {
                 CS · Security · Dev
               </p>
             </div>
-          </div>
+          </div> */}
 
           {/* Name — dominant anchor */}
           <h1 style={{
