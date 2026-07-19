@@ -22,6 +22,18 @@ function ScrollProgress() {
   const barRef = useRef(null);
 
   useEffect(() => {
+    // Force light mode on home page to preserve cinematic design
+    document.documentElement.classList.remove('dark');
+    
+    return () => {
+      // Restore dark mode if needed when leaving
+      if (localStorage.getItem('theme') === 'dark') {
+        document.documentElement.classList.add('dark');
+      }
+    };
+  }, []);
+
+  useEffect(() => {
     let raf = 0;
     const update = () => {
       raf = 0;
