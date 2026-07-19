@@ -6,6 +6,8 @@ import CinematicHome from "./components/cinematic/CinematicHome";
 
 const ProjectsPage      = lazy(() => import("./pages/ProjectsPage"));
 const MiniProjectsPage  = lazy(() => import("./pages/MiniProjectsPage"));
+const BlogsPage         = lazy(() => import("./pages/BlogsPage"));
+const BlogPostPage      = lazy(() => import("./pages/BlogPostPage"));
 // TechStackPage route is disabled (see commented <Route> below). Not lazy-imported
 // so it doesn't emit an unused chunk; re-add the import when re-enabling the route.
 const FreelancePortfolio = lazy(() => import("./pages/FreelancePortfolio"));
@@ -18,6 +20,8 @@ function AppRoutes() {
           <Route path="/"             element={<CinematicHome />} />
           <Route path="/projects"     element={<ProjectsPage />} />
           <Route path="/miniprojects" element={<MiniProjectsPage />} />
+          <Route path="/blogs"        element={<BlogsPage />} />
+          <Route path="/blogs/:id"    element={<BlogPostPage />} />
           {/* <Route path="/techstack" element={<TechStackPage />} /> */}
           <Route path="/freelance"    element={<FreelancePortfolio />} />
           <Route path="*"             element={<CinematicHome />} />
@@ -30,7 +34,7 @@ function AppRoutes() {
 function App() {
   const [isBooted, setIsBooted] = useState(false);
   const [showContent, setShowContent] = useState(false);
-
+  
   useEffect(() => {
     if (!showContent) {
       document.body.style.overflow = "hidden";

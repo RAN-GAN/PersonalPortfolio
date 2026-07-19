@@ -131,13 +131,13 @@ const CinematicLoader = ({ onComplete, onReveal }) => {
       {/* Background Panels with Grain */}
       <div 
         ref={leftPanelRef}
-        className="absolute left-0 top-0 w-1/2 h-full bg-[#fafaf9] border-r border-[#1c1917]/5 z-10 origin-right"
+        className="absolute left-0 top-0 w-1/2 h-full bg-[var(--color-td-bg,#fafaf9)] border-r border-[var(--color-td-ink,#1c1917)]/5 z-10 origin-right"
       >
         <div className="absolute inset-0 opacity-[0.03] pointer-events-none mix-blend-multiply cinematic-grain"></div>
       </div>
       <div 
         ref={rightPanelRef}
-        className="absolute right-0 top-0 w-1/2 h-full bg-[#fafaf9] border-l border-[#1c1917]/5 z-10 origin-left"
+        className="absolute right-0 top-0 w-1/2 h-full bg-[var(--color-td-bg,#fafaf9)] border-l border-[var(--color-td-ink,#1c1917)]/5 z-10 origin-left"
       >
         <div className="absolute inset-0 opacity-[0.03] pointer-events-none mix-blend-multiply cinematic-grain"></div>
       </div>
@@ -153,19 +153,19 @@ const CinematicLoader = ({ onComplete, onReveal }) => {
 
       {/* Content */}
       <div ref={contentRef} className="relative z-20 flex flex-col items-center">
-        <div className="text-[10px] tracking-[0.6em] uppercase text-[#1c1917]/30 mb-6 font-mono">
+        <div className="text-[10px] tracking-[0.6em] uppercase text-[var(--color-td-ink,#1c1917)]/30 mb-6 font-mono">
           Loading 
         </div>
         
         <div 
-          className="text-3xl font-black text-[#1c1917] tracking-[0.25em] uppercase mb-10"
+          className="text-3xl font-black text-[var(--color-td-ink,#1c1917)] tracking-[0.25em] uppercase mb-10"
           style={{ fontFamily: '"SAILORS", "Fraunces", Georgia, serif' }}
         >
           {status}
         </div>
         
         {/* Refined Progress Line */}
-        <div className="w-40 h-[1px] bg-[#1c1917]/5 relative overflow-hidden">
+        <div className="w-40 h-[1px] bg-[var(--color-td-ink,#1c1917)]/5 relative overflow-hidden">
           <div className="absolute top-0 left-0 h-full bg-[#b45309] w-full origin-left scale-x-0 animate-[loading-bar_4s_infinite_ease-in-out]"></div>
         </div>
       </div>

@@ -1,6 +1,7 @@
 import React from "react";
 import ArchiveLayout from "../components/cinematic/ArchiveLayout";
 import { MINI_PROJECTS } from "../data/portfolio";
+import { BlogContextTrigger } from "../components/ui/BlogContextMenu";
 
 const mono = { fontFamily: '"DM Mono", monospace' };
 const display = { fontFamily: '"SAILORS", "Fraunces", Georgia, serif' };
@@ -15,8 +16,8 @@ function MiniProjectsPage() {
       <section>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           {MINI_PROJECTS.map((project, idx) => (
+            <BlogContextTrigger key={project.title} blogLink="/blogs">
             <article
-              key={project.title}
               className="archive-reveal group bg-td-surface border border-td-border rounded-sm p-6 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
               style={{ "--reveal-delay": `${0.15 + idx * 0.05}s` }}
             >
@@ -30,7 +31,7 @@ function MiniProjectsPage() {
                 <div className="flex-1 min-w-0">
                   <h3
                     className="text-td-ink mb-1.5 leading-tight"
-                    style={{ ...display, fontSize: "1.15rem", color: "#000" }}
+                    style={{ ...display, fontSize: "1.15rem", color: "var(--color-td-ink)" }}
                   >
                     {project.title}
                   </h3>
@@ -40,6 +41,7 @@ function MiniProjectsPage() {
                 </div>
               </div>
             </article>
+            </BlogContextTrigger>
           ))}
         </div>
       </section>

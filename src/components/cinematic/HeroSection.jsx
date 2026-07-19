@@ -64,7 +64,14 @@ export default function HeroSection() {
         staticOpacity={0.04}
         revealStops={[0.16, 0.11, 0]}
         brushSize={150}
-        imageStyle={{ objectFit: "contain", objectPosition: "right bottom" }}
+        imageStyle={{
+          // A 1200×628 landscape image can't "contain" into a portrait phone
+          // without collapsing into a short band in the corner. On mobile we
+          // let it cover the viewport (cropping the sides) so it reads as a
+          // full-bleed ambient wash; desktop keeps the tucked-in contain look.
+          objectFit: canvas.mobile ? "cover" : "contain",
+          objectPosition: canvas.mobile ? "center" : "right bottom",
+        }}
       />
 
       {/* ── Case-file header ── */}

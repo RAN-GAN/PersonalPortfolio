@@ -1,4 +1,5 @@
 import profileImg from "../assets/profile.jpg";
+import nowPlayingContent from "./blogs/now-playing-widget.md?raw";
 
 export const PROFILE_IMAGE = profileImg;
 
@@ -176,4 +177,16 @@ export const MINI_PROJECTS = [
   { title: "Carbon GPT", desc: "A simple tool that estimates the carbon footprint of your ChatGPT usage." },
   { title: "Student Management Portal", desc: "A clean, feature-packed dashboard for staff to manage student information." },
   { title: "MTechDash (ongoing)", desc: "A unified dashboard designed to give students everything they need in one place." },
+];
+
+export const BLOGS = [
+  {
+    id: "01",
+    title: `How I Built a Custom "Now Playing" Widget for My Portfolio (Without Relying on the Spotify API)`,
+    desc: "An end-to-end look at capturing my phone's current song using a mobile app, Cloudflare Workers, and a React frontend.",
+    date: "2026-07-19",
+    tags: ["Cloudflare Workers", "Android", "React"],
+    link: "#/blogs/custom-now-listing-widget",
+    content: nowPlayingContent,
+  }
 ];

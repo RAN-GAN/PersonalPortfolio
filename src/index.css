@@ -50,6 +50,17 @@
   --font-mono:    "DM Mono", ui-monospace, monospace;
 }
 
+.dark {
+  --color-td-bg:       #1c1917;
+  --color-td-surface:  #292524;
+  --color-td-border:   #44403c;
+  --color-td-ink:      #fafaf9;
+  --color-td-muted:    #a8a29e;
+  --color-td-amber:    #fbbf24;
+  --color-td-amber-lt: #fde68a;
+  --color-td-sepia:    #fcd34d;
+}
+
 /* Global Styles */
 html {
   background-color: #efefef;
@@ -81,8 +92,8 @@ html:not([data-cinematic]) main {
 
 /* ── Cinematic Portfolio ── */
 .cinematic-page {
-  background-color: #fafaf9;
-  color: #1c1917;
+  background-color: var(--color-td-bg);
+  color: var(--color-td-ink);
   min-height: 100vh;
   overflow-x: hidden;
 }

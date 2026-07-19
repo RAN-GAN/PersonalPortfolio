@@ -4,6 +4,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { prefersReducedMotion } from "./useReducedMotion";
 import ChapterTitle from "./ChapterTitle";
+import { InkAmbient } from "../ui/ink-reveal";
 import { BIO, PERSONAL } from "../../data/portfolio";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -132,24 +133,25 @@ export default function AboutChapter() {
 
           {/* Bio paragraphs */}
           <div ref={linesRef} className="flex flex-col gap-6" style={{ position: "relative" }}>
-            {/* Bamboo behind the description text */}
-            <div
-              aria-hidden="true"
-              style={{
-                position: "absolute",
-                inset: "-6% -4%",
-                backgroundImage: "url('/PersonalPortfolio/bamboo.jpeg')",
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-                opacity: 0.04,
-                mixBlendMode: "multiply",
-                pointerEvents: "none",
-              }}
+            {/* Bamboo — ambient ink bloom revealed under the cursor, only here.
+                Very shallow carve + high mask opacity keep the bio text fully
+                readable; static faint texture on touch / reduced-motion. */}
+            <InkAmbient
+              src="/PersonalPortfolio/bamboo.jpeg"
+              maskColor={[250, 250, 249]}
+              maskOpacity={0.985}
+              staticOpacity={0.025}
+              revealStops={[0.06, 0.04, 0]}
+              brushSize={120}
+              stampStep={26}
+              maxStamps={70}
+              lifetime={480}
+              imageStyle={{ filter: "brightness(1.55) contrast(0.4)" }}
             />
             {BIO.long.map((para, i) => (
               <p
                 key={i}
-                className="text-td-muted leading-relaxed"
+                className="relative z-10 text-td-muted leading-relaxed"
                 style={{
                   fontFamily: '"Proxima Nova", "DM Sans", system-ui, sans-serif',
                   fontSize: "clamp(1rem, 1.3vw, 1.15rem)",
