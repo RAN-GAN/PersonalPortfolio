@@ -15,10 +15,11 @@ const BlogsPage = () => {
     >
       <section className="mt-8 sm:mt-12 flex flex-col gap-0 border-y border-td-border bg-td-surface/30">
         {BLOGS.map((b, i) => (
-          <article
+          <a
+            href={b.link}
             key={b.id}
-            className="archive-reveal group relative grid grid-cols-1 md:grid-cols-[180px_1fr] gap-4 md:gap-8 p-6 sm:p-8 border-b border-td-border last:border-b-0 hover:bg-td-border/20 transition-all duration-500"
-            style={{ "--reveal-delay": `${0.15 + i * 0.08}s` }}
+            className="archive-reveal group relative grid grid-cols-1 md:grid-cols-[180px_1fr] gap-4 md:gap-8 p-6 sm:p-8 border-b border-td-border last:border-b-0 hover:bg-td-border/20 transition-all duration-500 block"
+            style={{ "--reveal-delay": `${0.15 + i * 0.08}s`, textDecoration: 'none' }}
           >
             {/* Left column: Date and ID */}
             <div className="flex flex-col md:border-r md:border-td-border/50 md:pr-6 md:justify-center">
@@ -57,15 +58,12 @@ const BlogsPage = () => {
                 </div>
 
                 {b.link && (
-                  <a
-                    href={b.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                  <span
                     className="flex-shrink-0 inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.4em] text-td-amber opacity-0 group-hover:opacity-100 transition-opacity duration-300 ml-4"
                     style={mono}
                   >
                     Read <span aria-hidden>→</span>
-                  </a>
+                  </span>
                 )}
               </div>
             </div>
@@ -74,7 +72,7 @@ const BlogsPage = () => {
             <div 
               className="absolute left-0 top-0 bottom-0 w-[3px] bg-td-amber scale-y-0 group-hover:scale-y-100 origin-top transition-transform duration-500 ease-out"
             />
-          </article>
+          </a>
         ))}
       </section>
     </ArchiveLayout>

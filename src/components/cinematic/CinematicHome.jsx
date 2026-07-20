@@ -173,6 +173,8 @@ export default function CinematicHome() {
     { href: "#skills",   label: "Arsenal"  },
     { href: "#security", label: "Intel"    },
     { href: "#contact",  label: "Contact"  },
+        { href: "#/blogs",  label: "Journal"  },
+
   ];
 
   return (
@@ -228,8 +230,16 @@ export default function CinematicHome() {
               key={href}
               href={href}
               onClick={e => {
+                if (href.startsWith("#/")) {
+                  // This is a router link, let it navigate natively
+                  return;
+                }
                 e.preventDefault();
-                document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
+                try {
+                  document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
+                } catch (err) {
+                  console.warn("Invalid selector:", href);
+                }
               }}
               style={{
                 fontFamily: '"DM Mono", monospace',

@@ -1,5 +1,6 @@
 import profileImg from "../assets/profile.jpg";
 import nowPlayingContent from "./blogs/now-playing-widget.md?raw";
+import automatedResultContent from "./blogs/automated-result-notifications.md?raw";
 
 export const PROFILE_IMAGE = profileImg;
 
@@ -180,6 +181,15 @@ export const MINI_PROJECTS = [
 ];
 
 export const BLOGS = [
+  {
+    id: "02",
+    title: "Automated Result Notifications: Getting Results Before the Official Announcement",
+    desc: "How I built a system to detect college results minutes before the official announcement and automatically email them to 40+ students.",
+    date: "2026-07-20",
+    tags: ["Automation", "Web Scraping", "Python", "Email API"],
+    link: "#/blogs/automated-result-notifications",
+    content: automatedResultContent,
+  },
   {
     id: "01",
     title: `How I Built a Custom "Now Playing" Widget for My Portfolio (Without Relying on the Spotify API)`,

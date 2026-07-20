@@ -102,7 +102,7 @@ const BlogPostPage = () => {
           position: "fixed",
           inset: 0,
           backgroundImage:
-            "linear-gradient(rgba(28,25,23,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(28,25,23,0.05) 1px, transparent 1px)",
+            "linear-gradient(var(--color-td-grid) 1px, transparent 1px), linear-gradient(90deg, var(--color-td-grid) 1px, transparent 1px)",
           backgroundSize: "60px 60px",
           pointerEvents: "none",
         }}

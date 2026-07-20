@@ -120,31 +120,39 @@ export default function ContactOutro() {
 
       <div className="relative z-10 max-w-4xl mx-auto px-5 sm:px-12 text-center" ref={innerRef}>
         <p
-          className="font-mono text-[10px] uppercase tracking-[0.5em] text-td-muted mb-3"
+          className="font-mono text-[10px] uppercase tracking-[0.5em] text-td-amber mb-6"
           style={{ fontFamily: '"DM Mono", monospace' }}
         >
           Chapter 05 — Contact
         </p>
 
-        <p
-          className="font-display font-bold text-td-ink mb-3"
+        <h2
+          className="font-display font-medium text-td-ink mb-6 max-w-2xl mx-auto"
           style={{
             fontFamily: '"SAILORS", "Fraunces", Georgia, serif',
-            fontSize: "clamp(2.6rem, 6vw, 6rem)",
-            letterSpacing: "-0.025em",
-            lineHeight: 1.05,
+            fontSize: "clamp(1.5rem, 3.5vw, 2.2rem)",
+            lineHeight: 1.3,
             color: "#000",
           }}
         >
-          {PERSONAL.name}
-        </p>
+          You've reached the final chapter.
+        </h2>
 
-        <p
-          className="font-mono text-td-muted text-[11px] uppercase tracking-[0.5em] mb-8"
-          style={{ fontFamily: '"DM Mono", monospace' }}
+        <div 
+          className="text-td-muted text-sm sm:text-base max-w-lg mx-auto mb-10"
+          style={{ fontFamily: '"Proxima Nova", "DM Sans", system-ui, sans-serif', lineHeight: 1.8 }}
         >
-          Developer  ·  Researcher  ·  Builder
-        </p>
+          <p className="mb-5">Thanks for taking the time to explore my work.</p>
+          <p>
+            If something here resonated with you<br />
+            whether it's a project, an idea, or just curiosity<br />
+            I'd love to continue the conversation.
+          </p>
+        </div>
+
+        <div className="text-td-amber mb-8 font-mono text-lg animate-pulse" style={{ fontFamily: '"DM Mono", monospace' }}>
+          ↓
+        </div>
 
         {/* Links */}
         <div className="flex flex-wrap justify-center gap-x-6 sm:gap-x-10 gap-y-3 mb-8">
@@ -198,6 +206,13 @@ export default function ContactOutro() {
             style={{ fontFamily: '"DM Mono", monospace' }}
           >
             Freelance
+          </Link>
+          <Link
+            to="/blogs"
+            className="font-mono text-[9px] uppercase tracking-[0.45em] text-td-muted hover:text-td-amber transition-colors"
+            style={{ fontFamily: '"DM Mono", monospace' }}
+          >
+            Journal
           </Link>
         </div>
 
