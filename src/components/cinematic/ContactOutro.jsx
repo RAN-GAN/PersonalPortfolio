@@ -208,7 +208,7 @@ export default function ContactOutro() {
             Freelance
           </Link>
           <Link
-            to="/blogs"
+            to="/journal"
             className="font-mono text-[9px] uppercase tracking-[0.45em] text-td-muted hover:text-td-amber transition-colors"
             style={{ fontFamily: '"DM Mono", monospace' }}
           >

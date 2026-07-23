@@ -1,12 +1,12 @@
 import React from "react";
 import ArchiveLayout from "../components/cinematic/ArchiveLayout";
-import { BLOGS } from "../data/portfolio";
+import { JOURNAL } from "../data/portfolio";
 
 const mono = { fontFamily: '"DM Mono", monospace' };
 const display = { fontFamily: '"SAILORS", "Fraunces", Georgia, serif' };
 const sans = { fontFamily: "DM Sans, system-ui, sans-serif" };
 
-const BlogsPage = () => {
+const JournalPage = () => {
   return (
     <ArchiveLayout
       kicker="Documentation"
@@ -14,7 +14,7 @@ const BlogsPage = () => {
       subtitle="Insights, ideas, and technical explorations."
     >
       <section className="mt-8 sm:mt-12 flex flex-col gap-0 border-y border-td-border bg-td-surface/30">
-        {BLOGS.map((b, i) => (
+        {JOURNAL.map((b, i) => (
           <a
             href={b.link}
             key={b.id}
@@ -79,4 +79,4 @@ const BlogsPage = () => {
   );
 };
 
-export default BlogsPage;
+export default JournalPage;

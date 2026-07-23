@@ -1,7 +1,7 @@
 import React from "react";
 import ArchiveLayout from "../components/cinematic/ArchiveLayout";
 import { PROJECTS, ACHIEVEMENTS } from "../data/portfolio";
-import { BlogContextTrigger } from "../components/ui/BlogContextMenu";
+import { JournalContextTrigger } from "../components/ui/BlogContextMenu";
 
 const mono = { fontFamily: '"DM Mono", monospace' };
 const display = { fontFamily: '"SAILORS", "Fraunces", Georgia, serif' };
@@ -29,7 +29,7 @@ const ProjectsPage = () => {
         <SectionLabel>Achievements</SectionLabel>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {ACHIEVEMENTS.map((a, i) => (
-            <BlogContextTrigger key={a.label} blogLink="/blogs">
+            <JournalContextTrigger key={a.label} journalLink="/journal">
             <article
               className="archive-reveal bg-td-surface border border-td-border rounded-sm p-6 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
               style={{ "--reveal-delay": `${0.15 + i * 0.08}s` }}
@@ -58,7 +58,7 @@ const ProjectsPage = () => {
                 </a>
               )}
             </article>
-            </BlogContextTrigger>
+            </JournalContextTrigger>
           ))}
         </div>
       </section>
@@ -68,7 +68,7 @@ const ProjectsPage = () => {
         <SectionLabel>Projects</SectionLabel>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {PROJECTS.map((p, i) => (
-            <BlogContextTrigger key={p.id} blogLink="/blogs">
+            <JournalContextTrigger key={p.id} journalLink="/journal">
             <article
               className="archive-reveal bg-td-surface border border-td-border rounded-sm p-6 sm:p-7 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
               style={{ "--reveal-delay": `${0.3 + i * 0.08}s` }}
@@ -108,7 +108,7 @@ const ProjectsPage = () => {
                 </a>
               )}
             </article>
-            </BlogContextTrigger>
+            </JournalContextTrigger>
           ))}
         </div>
       </section>

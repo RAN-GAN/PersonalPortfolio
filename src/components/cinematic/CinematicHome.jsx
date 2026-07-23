@@ -173,7 +173,7 @@ export default function CinematicHome() {
     { href: "#skills",   label: "Arsenal"  },
     { href: "#security", label: "Intel"    },
     { href: "#contact",  label: "Contact"  },
-        { href: "#/blogs",  label: "Journal"  },
+    { href: "#/journal",  label: "Journal"  },
 
   ];
 

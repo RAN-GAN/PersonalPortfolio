@@ -1,6 +1,7 @@
 import profileImg from "../assets/profile.jpg";
-import nowPlayingContent from "./blogs/now-playing-widget.md?raw";
-import automatedResultContent from "./blogs/automated-result-notifications.md?raw";
+import rendisContent from "./journal/rendis.md?raw";
+import nowPlayingContent from "./journal/now-playing-widget.md?raw";
+import automatedResultContent from "./journal/automated-result-notifications.md?raw";
 
 export const PROFILE_IMAGE = profileImg;
 
@@ -180,14 +181,23 @@ export const MINI_PROJECTS = [
   { title: "MTechDash (ongoing)", desc: "A unified dashboard designed to give students everything they need in one place." },
 ];
 
-export const BLOGS = [
+export const JOURNAL = [
+  {
+    id: "03",
+    title: "Why I Built My Own Redis Server in Go",
+    desc: "It all started with a simple problem. I wanted a free Redis cache, but couldn't find one that fit. So I decided to build a Redis-compatible in-memory database from scratch in Go.",
+    date: "2026-07-22",
+    tags: ["Go", "Redis", "Networking", "Systems Programming"],
+    link: "#/journal/rendis",
+    content: rendisContent,
+  },
   {
     id: "02",
     title: "Automated Result Notifications: Getting Results Before the Official Announcement",
     desc: "How I built a system to detect college results minutes before the official announcement and automatically email them to 40+ students.",
     date: "2026-07-20",
     tags: ["Automation", "Web Scraping", "Python", "Email API"],
-    link: "#/blogs/automated-result-notifications",
+    link: "#/journal/automated-result-notifications",
     content: automatedResultContent,
   },
   {
@@ -196,7 +206,7 @@ export const BLOGS = [
     desc: "An end-to-end look at capturing my phone's current song using a mobile app, Cloudflare Workers, and a React frontend.",
     date: "2026-07-19",
     tags: ["Cloudflare Workers", "Android", "React"],
-    link: "#/blogs/custom-now-listing-widget",
+    link: "#/journal/custom-now-listing-widget",
     content: nowPlayingContent,
   }
 ];

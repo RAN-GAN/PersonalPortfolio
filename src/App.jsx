@@ -3,11 +3,12 @@ import { HashRouter, Routes, Route } from "react-router-dom";
 import { MotionConfig } from "framer-motion";
 import CinematicLoader from "./components/cinematic/CinematicLoader";
 import CinematicHome from "./components/cinematic/CinematicHome";
+import JournalPage from "./pages/JournalPage";
 
 const ProjectsPage      = lazy(() => import("./pages/ProjectsPage"));
 const MiniProjectsPage  = lazy(() => import("./pages/MiniProjectsPage"));
-const BlogsPage         = lazy(() => import("./pages/BlogsPage"));
-const BlogPostPage      = lazy(() => import("./pages/BlogPostPage"));
+// const JournalPage         = lazy(() => import("./pages/JournalPage"));
+const JournalPostPage      = lazy(() => import("./pages/JournalPostPage"));
 // TechStackPage route is disabled (see commented <Route> below). Not lazy-imported
 // so it doesn't emit an unused chunk; re-add the import when re-enabling the route.
 const FreelancePortfolio = lazy(() => import("./pages/FreelancePortfolio"));
@@ -20,8 +21,8 @@ function AppRoutes() {
           <Route path="/"             element={<CinematicHome />} />
           <Route path="/projects"     element={<ProjectsPage />} />
           <Route path="/miniprojects" element={<MiniProjectsPage />} />
-          <Route path="/blogs"        element={<BlogsPage />} />
-          <Route path="/blogs/:id"    element={<BlogPostPage />} />
+          <Route path="/journal"        element={<JournalPage />} />
+          <Route path="/journal/:id"    element={<JournalPostPage />} />
           {/* <Route path="/techstack" element={<TechStackPage />} /> */}
           <Route path="/freelance"    element={<FreelancePortfolio />} />
           <Route path="*"             element={<CinematicHome />} />

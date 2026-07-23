@@ -3,8 +3,8 @@ import { useParams, Link } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import PixelOverlay from "../components/ui/PixelOverlay";
-import { BLOGS } from "../data/portfolio";
-
+import { JOURNAL } from "../data/portfolio";
+import NowPlaying from "../components/cinematic/NowPlaying";
 const mono = { fontFamily: '"DM Mono", monospace' };
 const display = { fontFamily: '"SAILORS", "Fraunces", Georgia, serif' };
 const sans = { fontFamily: "DM Sans, system-ui, sans-serif" };
@@ -41,16 +41,16 @@ const MarkdownRenderer = ({ content }) => {
   );
 };
 
-const BlogPostPage = () => {
+const JournalPostPage = () => {
   const { id } = useParams();
-  const [blog, setBlog] = useState(null);
+  const [journal, setJournal] = useState(null);
   const [isAnimating, setIsAnimating] = useState(false);
   const [isDark, setIsDark] = useState(() => document.documentElement.classList.contains("dark"));
 
   useEffect(() => {
-    // Find the blog post by ID or by matching the URL slug in the link
-    const found = BLOGS.find((b) => b.id === id || b.link.endsWith(`/${id}`));
-    setBlog(found);
+    // Find the journal post by ID or by matching the URL slug in the link
+    const found = JOURNAL.find((b) => b.id === id || b.link.endsWith(`/${id}`));
+    setJournal(found);
     if (found) {
       document.title = `${found.title} — Pradeep Chandran M`;
     }
@@ -79,7 +79,7 @@ const BlogPostPage = () => {
     setIsDark(newIsDark);
   };
 
-  if (!blog) {
+  if (!journal) {
     return (
       <div className="min-h-screen flex items-center justify-center cinematic-page">
         <p className="font-mono text-sm uppercase tracking-widest text-td-muted" style={mono}>
@@ -111,7 +111,7 @@ const BlogPostPage = () => {
       <div className="relative max-w-3xl mx-auto px-5 sm:px-10 py-10 sm:py-24">
         <div className="flex justify-between items-center mb-16">
           <Link
-            to="/blogs"
+            to="/journal"
             className="archive-reveal inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.45em] text-td-muted hover:text-td-amber transition-colors"
             style={mono}
           >
@@ -129,11 +129,11 @@ const BlogPostPage = () => {
         <header className="archive-reveal mb-16 sm:mb-20" style={{ "--reveal-delay": "0.1s" }}>
           <div className="flex items-center gap-4 mb-5">
             <span className="font-mono text-[10px] uppercase tracking-[0.5em] text-td-amber" style={mono}>
-              Entry /{blog.id}
+              Entry /{journal.id}
             </span>
             <span className="h-px w-8 bg-td-border" />
             <span className="font-mono text-[10px] uppercase tracking-widest text-td-muted" style={mono}>
-              {blog.date}
+              {journal.date}
             </span>
           </div>
 
@@ -145,11 +145,11 @@ const BlogPostPage = () => {
               letterSpacing: "-0.02em",
             }}
           >
-            {blog.title}
+            {journal.title}
           </h1>
 
           <div className="flex flex-wrap gap-2">
-            {blog.tags.map(tag => (
+            {journal.tags.map(tag => (
               <span
                 key={tag}
                 className="font-mono text-[9px] uppercase tracking-[0.2em] text-td-muted/80 border border-td-border px-2 py-1"
@@ -162,17 +162,18 @@ const BlogPostPage = () => {
         </header>
 
         <article className="archive-reveal" style={{ "--reveal-delay": "0.3s" }}>
-          {blog.content ? (
-            <MarkdownRenderer content={blog.content} />
+          {journal.content ? (
+            <MarkdownRenderer content={journal.content} />
           ) : (
             <p className="font-mono text-sm text-td-muted italic" style={mono}>
               [ Content decryption pending for this log... ]
             </p>
           )}
         </article>
+        <NowPlaying></NowPlaying>
       </div>
     </main>
   );
 };
 
-export default BlogPostPage;
+export default JournalPostPage;

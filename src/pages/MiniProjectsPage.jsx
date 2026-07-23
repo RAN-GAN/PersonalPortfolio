@@ -1,7 +1,7 @@
 import React from "react";
 import ArchiveLayout from "../components/cinematic/ArchiveLayout";
 import { MINI_PROJECTS } from "../data/portfolio";
-import { BlogContextTrigger } from "../components/ui/BlogContextMenu";
+import { JournalContextTrigger } from "../components/ui/BlogContextMenu";
 
 const mono = { fontFamily: '"DM Mono", monospace' };
 const display = { fontFamily: '"SAILORS", "Fraunces", Georgia, serif' };
@@ -16,7 +16,7 @@ function MiniProjectsPage() {
       <section>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           {MINI_PROJECTS.map((project, idx) => (
-            <BlogContextTrigger key={project.title} blogLink="/blogs">
+            <JournalContextTrigger key={project.title} journalLink="/journal">
             <article
               className="archive-reveal group bg-td-surface border border-td-border rounded-sm p-6 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
               style={{ "--reveal-delay": `${0.15 + idx * 0.05}s` }}
@@ -41,7 +41,7 @@ function MiniProjectsPage() {
                 </div>
               </div>
             </article>
-            </BlogContextTrigger>
+            </JournalContextTrigger>
           ))}
         </div>
       </section>

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 
-export function BlogContextMenu({ x, y, onClose, blogLink }) {
+export function JournalContextMenu({ x, y, onClose, journalLink }) {
   const menuRef = useRef();
 
   useEffect(() => {
@@ -34,7 +34,7 @@ export function BlogContextMenu({ x, y, onClose, blogLink }) {
           Want to see how this works?
         </p>
         <Link 
-          to={blogLink || "/blogs"} 
+          to={journalLink || "/journal"} 
           className="block w-full text-left px-3 py-2 text-[10px] font-mono tracking-widest uppercase text-[#b24826] bg-transparent hover:bg-[#e4dccb]/50 border border-transparent hover:border-[#d2c9b4] transition-all rounded-sm"
           onClick={onClose}
         >
@@ -45,7 +45,7 @@ export function BlogContextMenu({ x, y, onClose, blogLink }) {
   );
 }
 
-export function BlogContextTrigger({ children, blogLink = "/blogs", className = "" }) {
+export function JournalContextTrigger({ children, journalLink = "/journal", className = "" }) {
   const [contextMenu, setContextMenu] = useState(null);
   const pressTimer = useRef(null);
 
@@ -90,10 +90,10 @@ export function BlogContextTrigger({ children, blogLink = "/blogs", className = 
         {children}
       </div>
       {contextMenu && (
-        <BlogContextMenu 
+        <JournalContextMenu 
           {...getMenuPosition(contextMenu.x, contextMenu.y)} 
           onClose={() => setContextMenu(null)}
-          blogLink={blogLink}
+          journalLink={journalLink}
         />
       )}
     </>
