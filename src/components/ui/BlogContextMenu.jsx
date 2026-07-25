@@ -27,18 +27,26 @@ export function JournalContextMenu({ x, y, onClose, journalLink }) {
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95 }}
         transition={{ duration: 0.15, ease: "easeOut" }}
-        className="fixed z-[9999] bg-[#f9f5f0] border border-[#d2c9b4] shadow-xl rounded-sm p-3 min-w-[220px]"
+        className="fixed z-[9999] bg-[#f9f5f0] border border-[#d2c9b4] shadow-xl rounded-sm p-1.5 min-w-[220px]"
         style={{ top: y, left: x }}
       >
-        <p className="text-[#333333] text-sm mb-3 font-medium" style={{ fontFamily: '"SAILORS", "Fraunces", Georgia, serif' }}>
-          Want to see how this works?
-        </p>
+        <div className="px-3 pt-2 pb-1.5 mb-1 border-b border-[#d2c9b4]/50">
+          <p className="font-mono text-[8px] uppercase tracking-[0.4em] text-[#b45309]">
+            // INVESTIGATE
+          </p>
+        </div>
+        <div className="px-3 py-2 mb-2">
+            <p className="text-[#1c1917] text-sm font-medium" style={{ fontFamily: '"SAILORS", "Fraunces", Georgia, serif' }}>
+              Want to see how this works?
+            </p>
+        </div>
         <Link 
           to={journalLink || "/journal"} 
-          className="block w-full text-left px-3 py-2 text-[10px] font-mono tracking-widest uppercase text-[#b24826] bg-transparent hover:bg-[#e4dccb]/50 border border-transparent hover:border-[#d2c9b4] transition-all rounded-sm"
+          className="flex items-center justify-between w-full px-3 py-2 text-[10px] font-mono tracking-[0.2em] uppercase text-[#1c1917] bg-[#f9f5f0] hover:bg-[#1c1917] hover:text-[#f9f5f0] transition-colors duration-150 rounded-sm group"
           onClick={onClose}
         >
-          Read the blog →
+          Open Case File
+          <span className="text-[#b45309] group-hover:text-[#f9f5f0] transition-colors">→</span>
         </Link>
       </motion.div>
     </AnimatePresence>
