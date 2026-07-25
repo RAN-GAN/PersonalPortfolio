@@ -174,7 +174,7 @@ async function fetchNowPlayingPayload({ signal, currentSongTitle }) {
 
 // ─── Component ──────────────────────────────────────────────────────────────
 
-function NowPlaying() {
+const NowPlaying = React.forwardRef((props, ref) => {
   const prefersReducedMotion = useReducedMotion();
   const [track, setTrack] = useState(EMPTY_TRACK);
   const [isLoading, setIsLoading] = useState(true);
@@ -263,6 +263,8 @@ function NowPlaying() {
 
   return (
     <section
+      ref={ref}
+      {...props}
       aria-live="polite"
       style={{
         position: "absolute",
@@ -465,6 +467,6 @@ function NowPlaying() {
       </div>
     </section>
   );
-}
+});
 
 export default NowPlaying;

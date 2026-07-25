@@ -40,7 +40,7 @@ export const PROJECTS = [
     title: "Automated Result Notifier",
     desc: "Monitors result portals in real-time and instantly notifies users when results are published.",
     tags: ["Python", "Web Scraping", "Email API", "Automation"],
-    link: null,
+    link: "#/journal/automated-result-notifications",
   },
   {
     id: "02",
@@ -69,6 +69,13 @@ export const PROJECTS = [
     desc: "A private, self-hosted SMS gateway that transforms Android devices into a secure communication pipeline using Cloudflare Workers and D1.",
     tags: ["Cloudflare Workers", "Next.js", "Kotlin", "D1", "Edge Computing"],
     link: "https://github.com/RAN-GAN/smsFlare",
+  },
+  {
+    id: "06",
+    title: "Rendis",
+    desc: "A Redis-compatible in-memory database built from scratch in Go.",
+    tags: ["Go", "Redis", "Networking", "Systems Programming"],
+    link: "#/journal/rendis",
   },
 ];
 

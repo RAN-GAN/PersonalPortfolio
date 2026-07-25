@@ -1,7 +1,8 @@
 import React from "react";
 import ArchiveLayout from "../components/cinematic/ArchiveLayout";
 import { PROJECTS, ACHIEVEMENTS } from "../data/portfolio";
-import { JournalContextTrigger } from "../components/ui/BlogContextMenu";
+import { CustomContextMenu } from "../components/CustomContextMenu";
+import { useNavigate, Link } from "react-router-dom";
 
 const mono = { fontFamily: '"DM Mono", monospace' };
 const display = { fontFamily: '"SAILORS", "Fraunces", Georgia, serif' };
@@ -18,6 +19,7 @@ function SectionLabel({ children }) {
 }
 
 const ProjectsPage = () => {
+  const navigate = useNavigate();
   return (
     <ArchiveLayout
       kicker="Case Archive"
@@ -68,7 +70,18 @@ const ProjectsPage = () => {
         <SectionLabel>Projects</SectionLabel>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {PROJECTS.map((p, i) => (
-            <JournalContextTrigger key={p.id} journalLink="/journal">
+            <CustomContextMenu
+              key={p.id}
+              menuText={p.link ? "Open Project Details" : "Project Classified"}
+              onClick={() => {
+                if (!p.link) return;
+                if (p.link.startsWith("#")) {
+                  navigate(p.link.replace(/^#/, ""));
+                } else {
+                  window.open(p.link, "_blank", "noopener,noreferrer");
+                }
+              }}
+            >
             <article
               className="archive-reveal bg-td-surface border border-td-border rounded-sm p-6 sm:p-7 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
               style={{ "--reveal-delay": `${0.3 + i * 0.08}s` }}
@@ -97,18 +110,28 @@ const ProjectsPage = () => {
                 ))}
               </div>
               {p.link && (
-                <a
-                  href={p.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-5 inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.4em] text-td-amber hover:gap-4 transition-all duration-300"
-                  style={mono}
-                >
-                  Open File <span aria-hidden>→</span>
-                </a>
+                p.link.startsWith("#") ? (
+                  <Link
+                    to={p.link.replace(/^#/, "")}
+                    className="mt-5 inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.4em] text-td-amber hover:gap-4 transition-all duration-300"
+                    style={mono}
+                  >
+                    Open File <span aria-hidden>→</span>
+                  </Link>
+                ) : (
+                  <a
+                    href={p.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-5 inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.4em] text-td-amber hover:gap-4 transition-all duration-300"
+                    style={mono}
+                  >
+                    Open File <span aria-hidden>→</span>
+                  </a>
+                )
               )}
             </article>
-            </JournalContextTrigger>
+            </CustomContextMenu>
           ))}
         </div>
       </section>

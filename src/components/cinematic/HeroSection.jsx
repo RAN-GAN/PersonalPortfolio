@@ -4,6 +4,8 @@ import NowPlaying from "./NowPlaying";
 import { useTextScramble } from "./TextScramble";
 import { InkAmbient } from "../ui/ink-reveal";
 import { PERSONAL } from "../../data/portfolio";
+import { CustomContextMenu } from "../CustomContextMenu";
+import { useNavigate } from "react-router-dom";
 
 const HEADLINE    = "Building Systems. Finding Vulnerabilities. Solving Problems.";
 const SUBHEADLINE = "CS Student  ·  Developer  ·  Security Researcher";
@@ -21,6 +23,7 @@ function calcCanvas() {
 }
 
 export default function HeroSection() {
+  const navigate = useNavigate();
   const [ready,  setReady]  = useState(false);
   const [canvas, setCanvas] = useState(calcCanvas);
 
@@ -175,7 +178,12 @@ export default function HeroSection() {
         }}>
           <div style={{ position: "relative", display: "inline-block" }}>
             <DoubleExposureCanvas width={canvas.w} height={canvas.h} />
-            <NowPlaying />
+            <CustomContextMenu 
+              menuText="Read about this widget" 
+              onClick={() => navigate("/journal/custom-now-listing-widget")}
+            >
+              <NowPlaying />
+            </CustomContextMenu>
           </div>
         </div>
       </div>

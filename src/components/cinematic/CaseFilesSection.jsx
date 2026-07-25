@@ -4,6 +4,8 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import ChapterTitle from "./ChapterTitle";
 import { PROJECTS } from "../../data/portfolio";
+import { Link, useNavigate } from "react-router-dom";
+import { CustomContextMenu } from "../CustomContextMenu";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -26,8 +28,23 @@ function CaseCard({ project, index }) {
     });
   }, { scope: ref });
 
+  const navigate = useNavigate();
+
+  const handleMenuClick = () => {
+    if (!project.link) return;
+    if (project.link.startsWith("#")) {
+      navigate(project.link.replace(/^#/, ""));
+    } else {
+      window.open(project.link, "_blank", "noopener,noreferrer");
+    }
+  };
+
   return (
-    <article
+    <CustomContextMenu 
+      menuText={project.link ? "Open Project Details" : "Project Classified"}
+      onClick={handleMenuClick}
+    >
+      <article
       ref={ref}
       className="group relative border border-td-border rounded-sm p-7 sm:p-9 transition-all duration-500 hover:-translate-y-1"
       style={{
@@ -83,15 +100,25 @@ function CaseCard({ project, index }) {
 
       {/* CTA */}
       {project.link ? (
-        <a
-          href={project.link}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.4em] text-td-amber hover:gap-4 transition-all duration-300"
-          style={{ fontFamily: '"DM Mono", monospace' }}
-        >
-          Open File <span aria-hidden>→</span>
-        </a>
+        project.link.startsWith("#") ? (
+          <Link
+            to={project.link.replace(/^#/, "")}
+            className="inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.4em] text-td-amber hover:gap-4 transition-all duration-300"
+            style={{ fontFamily: '"DM Mono", monospace' }}
+          >
+            Open File <span aria-hidden>→</span>
+          </Link>
+        ) : (
+          <a
+            href={project.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.4em] text-td-amber hover:gap-4 transition-all duration-300"
+            style={{ fontFamily: '"DM Mono", monospace' }}
+          >
+            Open File <span aria-hidden>→</span>
+          </a>
+        )
       ) : (
         <span
           className="font-mono text-[10px] uppercase tracking-[0.4em] text-td-muted/60"
@@ -111,6 +138,7 @@ function CaseCard({ project, index }) {
         }}
       />
     </article>
+    </CustomContextMenu>
   );
 }
 
