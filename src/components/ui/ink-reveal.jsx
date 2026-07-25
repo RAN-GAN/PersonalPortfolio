@@ -113,7 +113,7 @@ export default function InkReveal({
   );
 
   const addStamp = useCallback(
-    (x, y) => {
+    (x, y, overrides = {}) => {
       const stamps = stampsRef.current;
       if (stamps.length >= maxStamps) stamps.shift();
       stamps.push({
@@ -121,10 +121,12 @@ export default function InkReveal({
         y,
         born: performance.now(),
         seed: Math.random() * Math.PI * 2,
-        rmax: brushSize * (1 - rVary + Math.random() * rVary),
+        rmax: overrides.rmax || (brushSize * (1 - rVary + Math.random() * rVary)),
+        lifetime: overrides.lifetime || lifetime,
+        isRipple: overrides.isRipple || false
       });
     },
-    [brushSize, rVary, maxStamps]
+    [brushSize, rVary, maxStamps, lifetime]
   );
 
   const stampAlong = useCallback(
@@ -161,15 +163,18 @@ export default function InkReveal({
     ctx.globalCompositeOperation = "destination-out";
 
     for (let i = stamps.length - 1; i >= 0; i--) {
-      const t = (now - stamps[i].born) / lifetime;
+      const stamp = stamps[i];
+      const t = (now - stamp.born) / stamp.lifetime;
       if (t >= 1) {
         stamps.splice(i, 1);
         continue;
       }
-      const ease = 1 - Math.pow(1 - t, 3);
-      const r = rStart + (stamps[i].rmax - rStart) * ease;
-      const alpha = 1 - t * t;
-      carveInk(ctx, stamps[i].x, stamps[i].y, r, stamps[i].seed, alpha);
+      
+      const ease = stamp.isRipple ? (1 - Math.pow(1 - t, 4)) : (1 - Math.pow(1 - t, 3));
+      const r = rStart + (stamp.rmax - rStart) * ease;
+      const alpha = stamp.isRipple ? (1 - t) : (1 - t * t);
+      
+      carveInk(ctx, stamp.x, stamp.y, r, stamp.seed, alpha);
     }
 
     if (stamps.length) {
@@ -213,8 +218,24 @@ export default function InkReveal({
       startLoop();
     };
 
+    const onClick = (e) => {
+      if (e.button !== 0) return; // Only left click
+      const rect = canvas.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const inside = x >= 0 && y >= 0 && x <= rect.width && y <= rect.height;
+      if (!inside) return;
+
+      addStamp(x, y, { rmax: brushSize * 1.5, lifetime: 800, isRipple: true });
+      startLoop();
+    };
+
     window.addEventListener("pointermove", onMove, { passive: true });
-    return () => window.removeEventListener("pointermove", onMove);
+    window.addEventListener("pointerdown", onClick, { passive: true });
+    return () => {
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerdown", onClick);
+    };
   }, [ambient, stampAlong, startLoop]);
 
   const getRelativePos = (e) => {
@@ -259,6 +280,16 @@ export default function InkReveal({
           ? undefined
           : () => {
               lastPosRef.current = null;
+            }
+      }
+      onMouseDown={
+        ambient
+          ? undefined
+          : (e) => {
+              if (e.button !== 0) return;
+              const pos = getRelativePos(e);
+              addStamp(pos.x, pos.y, { rmax: brushSize * 1.5, lifetime: 800, isRipple: true });
+              startLoop();
             }
       }
     />

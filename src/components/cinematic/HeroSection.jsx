@@ -53,7 +53,7 @@ export default function HeroSection() {
   return (
     <section
       id="hero"
-      className="relative min-h-screen overflow-hidden bg-td-bg"
+      className="relative min-h-screen overflow-hidden bg-td-bg select-none"
       style={{ zIndex: 2 }}
     >
       {/* Japanese image — atmospheric ink-bloom that follows the cursor.
@@ -162,9 +162,36 @@ export default function HeroSection() {
           </p>
 
           {/* Sub */}
-          <p style={{ ...mono, fontSize: "clamp(0.55rem,0.78vw,0.65rem)", letterSpacing: "0.35em", textTransform: "uppercase", color: "rgba(28,25,23,0.58)" }}>
+          <p style={{ ...mono, fontSize: "clamp(0.55rem,0.78vw,0.65rem)", letterSpacing: "0.35em", textTransform: "uppercase", color: "rgba(28,25,23,0.58)", marginBottom: "2rem" }}>
             {sub}
           </p>
+
+          {/* Journal Button */}
+          <button
+            onClick={() => navigate('/journal')}
+            style={{
+              ...mono,
+              fontSize: "clamp(0.55rem,0.78vw,0.65rem)",
+              letterSpacing: "0.2em",
+              textTransform: "uppercase",
+              border: "1px solid #b45309",
+              color: "#b45309",
+              background: "transparent",
+              padding: "0.8rem 1.5rem",
+              cursor: "pointer",
+              transition: "all 0.3s ease",
+            }}
+            onMouseOver={(e) => {
+              e.currentTarget.style.background = "#b45309";
+              e.currentTarget.style.color = "#fafaf9";
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.style.background = "transparent";
+              e.currentTarget.style.color = "#b45309";
+            }}
+          >
+            Read Journal
+          </button>
         </div>
 
         {/* Portrait column */}

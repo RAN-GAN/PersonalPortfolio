@@ -6,14 +6,19 @@ import { prefersReducedMotion } from "./useReducedMotion";
 import { InkAmbient } from "../ui/ink-reveal";
 import { Link } from "react-router-dom";
 import { PERSONAL } from "../../data/portfolio";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "../ui/hover-card"
 
 gsap.registerPlugin(ScrollTrigger);
 
 const LINKS = [
-  { label: "GitHub",   href: PERSONAL.github,   external: true },
-  { label: "LinkedIn", href: PERSONAL.linkedin,  external: true },
-  { label: "Email",    href: PERSONAL.email,      external: false },
-  { label: "Resume",   href: PERSONAL.resume,     external: false, download: true },
+  { label: "GitHub",   href: PERSONAL.github,   external: true, desc: "Explore open-source contributions and active case files." },
+  { label: "LinkedIn", href: PERSONAL.linkedin,  external: true, desc: "Professional history and network connections." },
+  { label: "Email",    href: PERSONAL.email,      external: false, desc: "Direct communication line for inquiries and intel." },
+  { label: "Resume",   href: PERSONAL.resume,     external: false, download: true, desc: "Download full dossier of technical qualifications." },
 ];
 
 export default function ContactOutro() {
@@ -156,64 +161,65 @@ export default function ContactOutro() {
 
         {/* Links */}
         <div className="flex flex-wrap justify-center gap-x-6 sm:gap-x-10 gap-y-3 mb-8">
-          {LINKS.map(({ label, href, external, download }) =>
-            external || download ? (
-              <a
-                key={label}
-                href={href}
-                target={external ? "_blank" : undefined}
-                rel={external ? "noopener noreferrer" : undefined}
-                download={download || undefined}
-                className="font-mono text-[11px] uppercase tracking-[0.45em] text-td-muted hover:text-td-amber transition-colors duration-300 border-b border-transparent hover:border-td-amber pb-0.5"
-                style={{ fontFamily: '"DM Mono", monospace' }}
-              >
-                {label}
-              </a>
-            ) : (
-              <a
-                key={label}
-                href={href}
-                className="font-mono text-[11px] uppercase tracking-[0.45em] text-td-muted hover:text-td-amber transition-colors duration-300 border-b border-transparent hover:border-td-amber pb-0.5"
-                style={{ fontFamily: '"DM Mono", monospace' }}
-              >
-                {label}
-              </a>
-            )
-          )}
+          {LINKS.map(({ label, href, external, download, desc }) => (
+            <HoverCard key={label}>
+              <HoverCardTrigger asChild>
+                <a
+                  href={href}
+                  target={external ? "_blank" : undefined}
+                  rel={external ? "noopener noreferrer" : undefined}
+                  download={download || undefined}
+                  className="font-mono text-[11px] uppercase tracking-[0.45em] text-td-muted hover:text-td-amber transition-colors duration-300 border-b border-transparent hover:border-td-amber pb-0.5"
+                  style={{ fontFamily: '"DM Mono", monospace' }}
+                >
+                  {label}
+                </a>
+              </HoverCardTrigger>
+              <HoverCardContent sideOffset={8} className="z-[9999]">
+                <div className="flex flex-col gap-2">
+                  <span className="font-mono text-[10px] uppercase tracking-[0.4em] text-td-amber border-b border-td-border/50 pb-1 mb-1">
+                    // TARGET: {label}
+                  </span>
+                  <p className="text-[13px] text-td-ink text-left" style={{ fontFamily: '"DM Mono", monospace' }}>
+                    {desc}
+                  </p>
+                </div>
+              </HoverCardContent>
+            </HoverCard>
+          ))}
         </div>
 
 
 
         {/* Back to other sections */}
         <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 sm:gap-8 mb-6">
-          <Link
-            to="/projects"
-            className="font-mono text-[9px] uppercase tracking-[0.45em] text-td-muted hover:text-td-amber transition-colors"
-            style={{ fontFamily: '"DM Mono", monospace' }}
-          >
-            Projects
-          </Link>
-          <Link
-            to="/miniprojects"
-            className="font-mono text-[9px] uppercase tracking-[0.45em] text-td-muted hover:text-td-amber transition-colors"
-            style={{ fontFamily: '"DM Mono", monospace' }}
-          >
-            Mini Projects
-          </Link>
-          <Link
-            to="/freelance"
-            className="font-mono text-[9px] uppercase tracking-[0.45em] text-td-muted hover:text-td-amber transition-colors"
-            style={{ fontFamily: '"DM Mono", monospace' }}
-          >
-            Freelance
-          </Link>
-          <Link
-            to="/journal"
-            className="font-mono text-[9px] uppercase tracking-[0.45em] text-td-muted hover:text-td-amber transition-colors"
-            style={{ fontFamily: '"DM Mono", monospace' }}
-          >
-            Journal
-          </Link>
+          {[
+            { label: "Mini Projects", to: "/miniprojects",  desc: "A collection of smaller scripts, tools, and experimental code." },
+            { label: "Freelance",     to: "/freelance",     desc: "Client work, production-ready apps, and professional deployments." },
+            { label: "Journal",       to: "/journal",       desc: "Thoughts on engineering, security vulnerabilities, and development patterns." }
+          ].map(({ label, to, desc }) => (
+            <HoverCard key={label}>
+              <HoverCardTrigger asChild>
+                <Link
+                  to={to}
+                  className="font-mono text-[9px] uppercase tracking-[0.45em] text-td-muted hover:text-td-amber transition-colors border-b border-transparent hover:border-td-amber pb-0.5"
+                  style={{ fontFamily: '"DM Mono", monospace' }}
+                >
+                  {label}
+                </Link>
+              </HoverCardTrigger>
+              <HoverCardContent sideOffset={8} className="z-[99999]">
+                <div className="flex flex-col gap-2">
+                  <span className="font-mono text-[10px] uppercase tracking-[0.4em] text-td-amber border-b border-td-border/50 pb-1 mb-1">
+                    // NAVIGATE: {label}
+                  </span>
+                  <p className="text-[13px] text-td-ink text-left" style={{ fontFamily: '"DM Mono", monospace' }}>
+                    {desc}
+                  </p>
+                </div>
+              </HoverCardContent>
+            </HoverCard>
+          ))}
         </div>
 
         <p
